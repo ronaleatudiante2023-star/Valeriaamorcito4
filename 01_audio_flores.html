@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sección 1 · Audio y flores</title>
+<style>
+:root{--pink:#f7c6dc;--pink2:#ffeaf3;--hot:#d94f91;--blue:#355fba;--ink:#63324b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:Georgia,'Times New Roman',serif;color:var(--ink);background:radial-gradient(circle at 20% 20%,#fff3f8,transparent 35%),linear-gradient(135deg,#f7bfd7,#fce3ef 55%,#f4c5df);overflow-x:hidden}
+button,input{font:inherit}
+button{cursor:pointer}
+.screen{min-height:100vh;display:none;padding:28px 18px;align-items:center;justify-content:center;flex-direction:column;text-align:center}
+.screen.active{display:flex}
+.cover{position:relative;isolation:isolate}
+.cover:before,.cover:after{content:"♡";position:absolute;color:#fff8;font-size:100px;z-index:-1;animation:float 5s ease-in-out infinite}
+.cover:before{top:10%;left:8%}.cover:after{bottom:8%;right:8%;animation-delay:1.5s}
+.eyebrow{letter-spacing:.2em;text-transform:uppercase;font:12px Arial,sans-serif;color:#a34b78}
+h1{font-size:clamp(2.5rem,8vw,5rem);line-height:1.02;margin:18px 0 12px;color:#9c376a;text-shadow:0 2px 0 #fff9}
+.subtitle{max-width:430px;line-height:1.7;font-size:1.08rem}
+.main-btn,.small-btn{border:0;border-radius:999px;background:linear-gradient(135deg,#cf4d8d,#a43b78);color:white;padding:15px 27px;box-shadow:0 9px 24px #a43b7838;transition:transform .2s}
+.main-btn{min-height:54px;min-width:170px;padding:16px 30px;font-weight:700;letter-spacing:.02em;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;isolation:isolate}
+.main-btn:focus-visible{outline:3px solid #7c2e58;outline-offset:4px}
+.main-btn:active{transform:translateY(1px) scale(.98);box-shadow:0 4px 12px #a43b7838}
+@media(prefers-reduced-motion:reduce){.main-btn,.small-btn{transition:none}}
+.main-btn:hover,.small-btn:hover{transform:translateY(-2px)}
+.tiny{font:12px Arial,sans-serif;opacity:.75;margin-top:18px}
+.panel{width:min(760px,100%);background:#fff9;border:1px solid #fff9;border-radius:28px;padding:clamp(20px,5vw,38px);box-shadow:0 20px 55px #7e31551c;backdrop-filter:blur(8px)}
+h2{font-size:clamp(1.8rem,5vw,2.8rem);margin:0 0 10px;color:#a23c70}
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin:25px 0}
+.track{border:1px solid #edbad1;border-radius:18px;background:#fff9;padding:17px;text-align:left;color:var(--ink);transition:.2s}
+.track:hover{background:white;transform:translateY(-2px)}
+.track strong{display:block;margin-bottom:6px}.track span{font:12px Arial,sans-serif;opacity:.75}
+.player-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:25px;align-items:center;margin-top:20px}
+.vinyl-wrap{display:flex;flex-direction:column;align-items:center;gap:15px}
+.vinyl{width:min(62vw,250px);aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,#24202a 0 3px,#3a3440 4px 6px,#211d25 7px 9px);box-shadow:0 15px 30px #53233c35;display:grid;place-items:center;position:relative}
+.vinyl:before{content:"";position:absolute;inset:12%;border:1px solid #ffffff17;border-radius:50%}
+.vinyl.spin{animation:spin 3.5s linear infinite}
+.label-disc{width:34%;aspect-ratio:1;border-radius:50%;background:linear-gradient(135deg,#f7b8d2,#f5dce8);border:5px solid #f4d3e1;display:grid;place-items:center;font-size:1.35rem;color:#9d3c70}
+.tonearm{width:85px;height:8px;background:#d8c6cc;border-radius:8px;position:absolute;right:-23px;top:24px;transform:rotate(36deg);transform-origin:right center;box-shadow:0 2px 4px #0002}
+.tonearm:after{content:"";position:absolute;right:-3px;bottom:-5px;width:20px;height:18px;background:#8e7b86;border-radius:5px;transform:rotate(-18deg)}
+.audio-box{background:#fff9;border-radius:18px;padding:15px;text-align:left}
+audio{width:100%;margin-top:10px}
+.file-label{display:inline-block;background:#fff;border:1px dashed #d98db4;border-radius:12px;padding:10px 13px;font:13px Arial,sans-serif;cursor:pointer;margin:8px 0}
+input[type=file]{display:none}
+.progress-note{font:12px Arial,sans-serif;opacity:.7}
+.memories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
+.memory{min-height:205px;border-radius:18px;background:linear-gradient(160deg,#fffdfd,#ffe5f0);padding:18px 13px;display:flex;flex-direction:column;justify-content:center;align-items:center;opacity:0;transform:translateY(14px) scale(.97);transition:opacity .7s,transform .7s;box-shadow:0 7px 20px #9b3b6410}
+.memory.show{opacity:1;transform:translateY(0) scale(1)}
+.flower{width:116px;height:116px;line-height:1;margin-bottom:12px;filter:drop-shadow(0 4px 3px #db82ad66);overflow:visible}
+.flower svg{width:100%;height:100%;overflow:visible}
+.memory p{font-family:"Courier New",monospace;font-weight:700;font-size:clamp(.82rem,2.3vw,1rem);line-height:1.6;letter-spacing:.025em;margin:0;image-rendering:auto;text-shadow:1px 1px 0 #fff;filter:none!important;opacity:1!important;position:relative;z-index:1}
+.memory:nth-child(1){transition-delay:0s}.memory:nth-child(2){transition-delay:.65s}.memory:nth-child(3){transition-delay:1.3s}.memory:nth-child(4){transition-delay:1.95s}
+.memory:nth-child(2) .flower{filter:hue-rotate(175deg) saturate(1.25) drop-shadow(0 4px 3px #77a6f866)}
+.memory:nth-child(4) .flower{filter:hue-rotate(175deg) saturate(1.25) drop-shadow(0 4px 3px #77a6f866)}
+.pixel-note{font:11px Arial,sans-serif;color:#98506f;opacity:.8;margin-top:8px}
+.footer-note{font:12px Arial,sans-serif;opacity:.7;margin-top:18px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.ghost-btn{background:#fff9;color:#963767;border:1px solid #e8aac8;border-radius:999px;padding:11px 17px}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes float{50%{transform:translateY(-18px) rotate(12deg)}}
+@media(max-width:620px){.player-layout{grid-template-columns:1fr}.vinyl{width:200px}.memories{gap:9px}.memory{min-height:170px;padding:14px 10px}.memory p{font-size:.93rem}.tonearm{right:-12px}}
+
+.bouquet-photo{width:100%;height:100%;object-fit:contain;image-rendering:auto;border-radius:12px}
+.memory .flower{flex-shrink:0;width:min(190px,38vw);height:190px;display:flex;align-items:center;justify-content:center;background:#08070b;border:2px solid #f7c6dc;border-radius:14px;overflow:hidden}
+.memory{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px}
+.memories{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;grid-auto-rows:1fr;align-items:stretch;position:relative;transition:transform 1.2s ease;filter:none!important}
+.memories.blurred{transform:scale(.97)}
+.memories.blurred .flower{filter:blur(8px)!important;transition:filter 1.2s ease}
+.memories .flower{transition:filter 1.2s ease}
+.memories .memory p{filter:none!important;opacity:1!important;transition:opacity .4s ease;position:relative;z-index:1;text-shadow:1px 1px 0 #fff,0 0 2px #fff}
+.memories.blurred .memory p{filter:none!important;opacity:1!important;transform:none!important;backdrop-filter:none!important}
+#surprise-scene{display:none;position:relative;margin:26px auto 10px;width:min(520px,100%);padding:22px 16px 28px;border:2px solid #f4b8d2;border-radius:26px;background:linear-gradient(145deg,#fff4fa,#fbe0ef);box-shadow:0 15px 45px #8d346533;overflow:hidden;animation:sceneIn .9s ease both}
+#surprise-scene.visible{display:block}
+@keyframes sceneIn{from{opacity:0;transform:translateY(25px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+.dog-pixel{display:block;width:min(240px,65vw);max-height:260px;object-fit:contain;margin:0 auto;image-rendering:pixelated;animation:dogBounce 1.8s ease-in-out infinite;filter:drop-shadow(0 8px 0 #efbad3)}
+.dog-with-envelope{position:relative;width:min(360px,94vw);margin:0 auto;padding:0 0 12px;display:flex;justify-content:center;align-items:flex-end;min-height:180px}
+.dog-with-envelope .dog-pixel{width:min(280px,72vw);max-height:280px;margin:0 auto}
+.dog-with-envelope .envelope{width:104px;height:68px;animation:envelopeOffer 2.4s ease-in-out infinite}
+.dog-with-envelope .envelope-btn span{display:block;background:#fff0f8;border:1px solid #f1a6cc;border-radius:6px;padding:4px 7px;box-shadow:0 2px 0 #d56a9c;white-space:nowrap}
+@keyframes envelopeOffer{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(max-width:420px){.dog-with-envelope{width:min(320px,96vw)}.dog-with-envelope .dog-pixel{width:min(245px,70vw)}.dog-with-envelope .envelope-btn{left:55%;top:31%;transform:rotate(-8deg) scale(.58)}}
+
+@keyframes dogBounce{0%,100%{transform:translateY(0) rotate(-1deg)}35%{transform:translateY(-13px) rotate(1deg)}55%{transform:translateY(-7px) rotate(0)}75%{transform:translateY(-2px) rotate(-1deg)}}
+.dog-hearts{font-size:22px;letter-spacing:8px;animation:heartFloat 2s ease-in-out infinite}
+@keyframes heartFloat{0%,100%{transform:translateY(0);opacity:.65}50%{transform:translateY(-6px);opacity:1}}
+.valeria-pixel{font-family:"Courier New",monospace;font-weight:900;font-size:clamp(1.6rem,7vw,2.5rem);letter-spacing:.08em;color:#ff72b6;text-shadow:3px 3px 0 #bd397c,5px 5px 0 #ffd5e9;image-rendering:pixelated;margin:6px 0 2px}
+.envelope-btn{position:relative;border:0;background:transparent;padding:10px 16px 4px;display:flex;flex-direction:column;align-items:center;gap:8px;margin:0 auto;color:#a33b73}
+.envelope{position:relative;width:150px;height:100px;background:#f8a9cc;border:3px solid #c94f8d;box-shadow:inset 0 -8px #ef8db9;clip-path:polygon(0 0,100% 0,100% 100%,0 100%);border-radius:8px;animation:envelopeWiggle 2.4s ease-in-out infinite}
+.envelope.opened:before{transform:rotateX(180deg);z-index:0}.envelope:before{content:"";position:absolute;inset:0;background:#ffd9e9;clip-path:polygon(0 0,50% 60%,100% 0);border-bottom:3px solid #c94f8d;transform-origin:top;transition:transform .6s;z-index:2}
+.envelope:after{content:"♥";position:absolute;left:calc(50% - 12px);top:34px;font-size:24px;color:#d8468b;z-index:3}
+@keyframes envelopeWiggle{0%,100%{transform:rotate(0)}15%{transform:rotate(-3deg)}30%{transform:rotate(3deg)}45%{transform:rotate(0)}}
+.envelope-btn span{font: bold 13px "Courier New",monospace;color:#a33b73;letter-spacing:.04em}
+@media(max-width:520px){.memories{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px}.memory{min-width:0;padding:12px 7px;min-height:170px}.memory .flower{width:min(42vw,190px);height:min(42vw,190px)}.memory p{font-size:clamp(.72rem,3vw,.93rem);overflow-wrap:anywhere}#surprise-scene{padding:18px 10px}}
+
+
+/* Mini juego: recolectar florecitas mientras aparecen los mensajes */
+#flower-game{position:relative;max-width:520px;margin:18px auto 8px;padding:14px 12px 18px;border:1px solid #f1b6d1;border-radius:18px;background:#fff8fc;overflow:hidden}
+#flower-game h3{font-size:1.1rem;margin:0 0 5px;color:#a23c70}
+#flower-game .game-help{font:12px Arial,sans-serif;margin:0 0 8px;color:#98506f}
+#flower-game .score{font:bold 13px 'Courier New',monospace;color:#a23c70}
+#flower-rain{height:190px;position:relative;overflow:hidden;border-radius:12px;background:linear-gradient(#fff4fa,#fce2ef)}
+.falling-flower{position:absolute;top:-28px;border:0;background:transparent;padding:2px;font-size:25px;line-height:1;cursor:pointer;filter:drop-shadow(0 2px 2px #a33b7333);animation:flowerFall var(--fall-time,3s) linear forwards;z-index:2}
+.falling-flower:focus-visible{outline:2px solid #a33b73;border-radius:50%}
+.falling-flower.caught{animation:flowerCatch .28s ease forwards;pointer-events:none}
+@keyframes flowerFall{from{top:-30px;transform:rotate(0deg)}to{top:205px;transform:rotate(210deg)}}
+@keyframes flowerCatch{to{transform:scale(1.8) rotate(40deg);opacity:0}}
+#flower-game.done #flower-rain{opacity:.65}
+
+
+/* Sobre final personalizado para Valeria */
+.final-gift{display:flex;flex-direction:column;align-items:center;gap:14px;margin:12px auto 18px;}
+.valeria-envelope-button{border:0;background:transparent;padding:8px 12px;display:flex;flex-direction:column;align-items:center;gap:12px;cursor:pointer;color:#963767;}
+.valeria-envelope{position:relative;display:block;width:min(230px,65vw);height:145px;border:3px solid #c94f8d;border-radius:10px;background:linear-gradient(145deg,#ffd8e9,#f49bc5);box-shadow:inset 0 -9px 0 #e97eaf,0 9px 0 #d66c9c,0 14px 22px #a33b7326;overflow:hidden;transition:transform .45s ease,filter .45s ease;animation:envelopeWiggle 2.4s ease-in-out infinite;}
+.valeria-envelope:before{content:"";position:absolute;inset:0 0 auto;height:75%;background:#ffeaf3;clip-path:polygon(0 0,100% 0,50% 72%);border-bottom:2px solid #d76a9d;transform-origin:top;transition:transform .65s ease;z-index:2;}
+.valeria-envelope:after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,transparent 49.2%,#d96d9e 50%,transparent 51%),linear-gradient(35deg,transparent 49.2%,#d96d9e 50%,transparent 51%);z-index:1;}
+.envelope-name{position:absolute;z-index:3;left:0;right:0;top:48px;font:bold 24px 'Courier New',monospace;color:#a33b73;text-shadow:1px 1px #fff;text-align:center;}
+.envelope-heart{position:absolute;z-index:4;bottom:12px;left:calc(50% - 10px);color:#cf4387;font-size:20px;}
+.envelope-instruction{font:bold 14px 'Courier New',monospace;color:#a33b73;background:#fff3f9;border:1px solid #f1b6d1;border-radius:999px;padding:9px 14px;box-shadow:0 3px 0 #e8a2c5;}
+.valeria-envelope-button:hover .valeria-envelope,.valeria-envelope-button:focus-visible .valeria-envelope{transform:translateY(-4px) scale(1.03);}
+.valeria-envelope-button:focus-visible{outline:2px solid #a33b73;outline-offset:4px;border-radius:14px;}
+.valeria-envelope-button.opened .valeria-envelope{animation:none;transform:translateY(4px) scale(.97);}
+.valeria-envelope-button.opened .valeria-envelope:before{transform:rotateX(180deg);z-index:0;}
+.final-image-reveal{display:none;width:100%;max-width:330px;animation:sceneIn .7s ease both;}
+.final-image-reveal.visible{display:block;}
+.final-surprise-image{display:block;width:100%;max-height:320px;object-fit:contain;margin:0 auto;image-rendering:pixelated;filter:drop-shadow(0 8px 0 #efbad3);animation:none;}
+@media(max-width:420px){.valeria-envelope{height:125px}.envelope-name{top:40px;font-size:22px}.final-image-reveal{max-width:280px}}
+
+
+/* Solo en el audio 02: la cita no usa el disco ni el juego de flores del audio 01. */
+#player.paparazzi-mode .player-layout,#player.paparazzi-mode #flower-game,#player.paparazzi-mode #memories,#player.paparazzi-mode #surprise-scene,#player.paparazzi-mode .nav,#player.paparazzi-mode .pixel-note,#player.paparazzi-mode .footer-note{display:none!important}
+#paparazzi-audio{display:none}
+#player.paparazzi-mode #paparazzi-audio{display:block!important;margin:14px auto;max-width:100%}
+.paparazzi-experience{margin:22px auto;padding:20px;max-width:760px;text-align:center;background:#fff7fb;border:1px solid #efbfd4;border-radius:22px;color:#67364f}
+.paparazzi-experience[hidden],#paparazzi-date[hidden],#paparazzi-dog[hidden],#paparazzi-letter[hidden]{display:none!important}
+.paparazzi-experience h2{color:#a33b73}.paparazzi-flowers{display:grid;grid-template-columns:repeat(2,minmax(70px,110px));gap:12px;justify-content:center;margin:18px auto}
+.pap-flower{font-size:2rem;min-height:78px;border:1px solid #f0c8da;border-radius:16px;background:#fff;cursor:pointer}.pap-flower.done{opacity:0;transform:scale(.7);pointer-events:none;transition:opacity .5s,transform .5s}
+.pap-options{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}.pap-options button,#paparazzi-envelope{border:0;border-radius:22px;padding:12px 16px;background:#a33b73;color:white;cursor:pointer}.pap-options button.chosen{background:#64896b}
+#paparazzi-dialogue{padding:12px;background:white;border-radius:14px;line-height:1.5}.pap-meter{height:14px;background:#f3d7e4;border-radius:99px;overflow:hidden}.pap-meter div{height:100%;width:0;background:linear-gradient(90deg,#ff8eb5,#b45be0);transition:width .3s}.paparazzi-experience audio{display:block;margin:16px auto}
+
+ 
+#paparazzi-choice-display[hidden]{display:none!important}
+.pap-choice-card{margin:14px auto;padding:14px;background:#fff0f7;border:1px solid #efbfd4;border-radius:18px;max-width:560px;animation:sceneIn .45s ease both}
+.pap-choice-card>img{display:block;width:100%;max-width:360px;max-height:420px;object-fit:contain;margin:0 auto 12px;border-radius:12px}
+.pap-food-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px auto}
+.pap-food-item{margin:0;padding:8px;background:white;border:1px solid #f0c8da;border-radius:12px;font-size:.92rem}
+.pap-food-item img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;border-radius:8px;margin-bottom:6px}
+@media(max-width:420px){.pap-food-gallery{gap:7px}.pap-food-item{padding:5px;font-size:.82rem}}
+
+ .flower-kisses-message{margin:18px auto;padding:16px;background:#fff0f6;border:1px solid #efbfd4;border-radius:16px;text-align:center;color:#a33b73;font-weight:bold;line-height:1.5}
+
+.pap-food-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:520px;margin:16px auto}.pap-food-grid img{display:block;width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid #f0c5d9;border-radius:14px;padding:5px}.pap-choice-card>img{max-width:100%;width:min(100%,420px);max-height:520px;object-fit:contain;border-radius:16px}.pap-choice-card p{line-height:1.6}
+
+.pap-movie-collage{display:block;width:100%;max-width:560px;height:auto;margin:16px auto 4px;border-radius:16px;box-shadow:0 5px 18px rgba(120,55,90,.15)}
+
+/* Nueva cita romántica: únicamente sección Paparazzi */
+#paparazzi-experience .pap-intro{max-width:560px;margin:14px auto 20px}
+#paparazzi-experience .pap-boy-portrait{display:block;width:clamp(145px,42vw,230px);max-height:260px;object-fit:cover;object-position:center 30%;margin:0 auto 14px;border-radius:18px;image-rendering:pixelated;box-shadow:0 7px 0 #e9b4d0}
+#paparazzi-experience .pap-route-options{display:grid;grid-template-columns:1fr;max-width:580px;margin:16px auto}
+#paparazzi-experience .pap-route-options button{line-height:1.45;padding:14px 16px;box-shadow:0 4px 0 #7f2e58;transition:transform .18s,opacity .18s}
+#paparazzi-experience .pap-route-options button:hover{transform:translateY(-2px)}
+#paparazzi-experience .pap-route-options button:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
+#paparazzi-experience .pap-scene{margin:16px auto;padding:16px;max-width:580px;background:#fff0f7;border:1px solid #efbfd4;border-radius:18px;animation:sceneIn .45s ease both;line-height:1.6}
+#paparazzi-experience .pap-scene .pap-scene-boy{display:block;width:min(100%,230px);max-height:260px;object-fit:cover;object-position:center 30%;margin:8px auto 12px;border-radius:14px;image-rendering:pixelated}
+#paparazzi-experience .pap-subchoices{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:14px auto}
+#paparazzi-experience .pap-subchoices button,#paparazzi-experience .pap-interactive{border:0;border-radius:18px;padding:11px 14px;background:#a33b73;color:white;cursor:pointer}
+#paparazzi-experience .pap-subchoices button:disabled{opacity:.55;cursor:not-allowed}
+#paparazzi-experience .pap-ring{font-size:3rem;display:inline-grid;place-items:center;width:78px;height:78px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #efbfd4;cursor:pointer;margin:8px}
+#paparazzi-experience .pap-letter-image{display:block;width:100%;max-width:520px;max-height:75vh;object-fit:contain;margin:12px auto;border-radius:12px}
+#paparazzi-experience #paparazzi-letter[hidden],#paparazzi-experience #paparazzi-dog[hidden]{display:none!important}
+#paparazzi-experience .pap-proposal{background:linear-gradient(145deg,#fff0f7,#f1e8ff)}
+#paparazzi-experience .pap-carry-illustration{display:grid;place-items:center;min-height:125px;margin:12px auto;padding:16px;border-radius:18px;background:linear-gradient(145deg,#fff,#ffe2ef);font-size:clamp(2.5rem,10vw,4.2rem);letter-spacing:.05em;box-shadow:inset 0 0 0 1px #f3c1d8;animation:sceneIn .55s ease both}
+#paparazzi-experience .pap-carry-brazos .pap-carry-illustration{background:linear-gradient(145deg,#fff2f8,#f8d2e7)}
+#paparazzi-experience .pap-carry-hombros .pap-carry-illustration{background:linear-gradient(145deg,#fff7e8,#ffe2ef)}
+#paparazzi-experience .pap-carry-espalda .pap-carry-illustration{background:linear-gradient(145deg,#f5f1ff,#ffe2ef)}
+
+#paparazzi-experience .pap-proposal .pap-kneel{font-size:3.2rem;line-height:1.2}
+#paparazzi-experience .pap-complete-note{font-weight:bold;color:#8d3264;margin-top:12px}
+@media(max-width:420px){#paparazzi-experience .pap-scene{padding:12px}#paparazzi-experience .pap-route-options button{font-size:.95rem}}
+
+
+#paparazzi-experience #pap-part-one[hidden],#paparazzi-experience #pap-part-two[hidden],#paparazzi-experience #pap-first-scene[hidden]{display:none!important}
+#paparazzi-experience #pap-first-options button:disabled{opacity:.5;cursor:not-allowed}
+#paparazzi-experience #pap-first-options button.chosen{outline:3px solid #f2a4c8}
+
+
+#paparazzi-experience .pap-route-art{display:block;width:100%;max-width:560px;height:auto;max-height:75vh;object-fit:contain;margin:12px auto;border-radius:14px}\n#paparazzi-experience .pap-cooking-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-items:center}\n#paparazzi-experience .pap-cooking-gallery .pap-route-art{width:100%;max-height:340px;object-fit:contain;margin:4px auto;background:#fff7fb}\n@media(max-width:420px){#paparazzi-experience .pap-cooking-gallery{gap:6px}}
+#paparazzi-experience .pap-icecream-scene p,#paparazzi-experience .pap-series-scene p{font-size:1.08rem;line-height:1.6;font-weight:600;text-align:center;margin:14px auto;max-width:650px}
+
+
+.diary-photo-strip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding:8px 2px 16px;touch-action:pan-x;scrollbar-width:thin}
+.diary-photo-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;margin:0}
+.diary-photo-slide img{display:block;max-width:100%;width:auto;height:auto;max-height:62vh;object-fit:contain;border-radius:14px;box-shadow:0 5px 20px #6d405022;background:white}
+.diary-photo-count{text-align:center;color:#874263;font-size:.9rem}
+.diary-photo-tip{text-align:center;color:#a23c70;font-size:.9rem}
+
+.favorite-chats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;max-width:650px;margin:22px auto}
+.favorite-chat{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:125px;width:100%;max-width:none;padding:14px 12px;border:1px solid #f2a7c1;border-radius:20px;background:linear-gradient(145deg,#fff0f5,#ffd5e4);color:#633247;text-align:center;box-shadow:0 5px 0 #d95d83,0 8px 18px #a62c5b18;cursor:pointer;animation:diaryFloat 3s ease-in-out infinite;font:inherit;transition:transform .2s,box-shadow .2s}
+.favorite-chat:nth-child(even){align-self:auto;border-radius:20px;background:linear-gradient(145deg,#ffe3ed,#f7b9d0);animation-delay:.35s}
+.favorite-chat:hover,.favorite-chat:focus-visible{transform:translateY(-3px) scale(1.02);box-shadow:0 7px 0 #d95d83,0 12px 22px #a62c5b24;outline:2px solid #e879a0;outline-offset:3px}
+.chat-bubble-icon{display:grid;place-items:center;width:54px;height:44px;border-radius:17px;background:#f48bb0;color:#fff;font-size:34px;line-height:1;filter:drop-shadow(0 3px 0 #d95780);position:relative}
+.chat-bubble-icon:after{content:"";position:absolute;bottom:-5px;left:10px;border-width:7px 7px 0 0;border-style:solid;border-color:#f48bb0 transparent transparent transparent}
+.favorite-chat-label{display:block;font-size:.95rem;font-weight:650;line-height:1.3}.favorite-chat small{display:block;margin-top:0;font-size:.76rem;color:#92516a;line-height:1.3}
+.favorite-chat-reveal{position:relative;margin:24px auto 4px;padding:18px 12px 14px;max-width:540px;border:2px solid #e7a6bd;border-radius:18px;background:#fff8fb;box-shadow:0 10px 24px #71355122;text-align:center;animation:diaryPageReveal .35s ease both}
+.favorite-chat-reveal[hidden]{display:none}.favorite-chat-reveal img{display:block;width:auto;max-width:100%;max-height:68vh;object-fit:contain;margin:12px auto 2px;border-radius:10px}.favorite-chat-close{position:absolute;right:8px;top:8px;border:0;border-radius:50%;background:#f7d5e2;padding:7px 10px;cursor:pointer}
+@media(max-width:420px){.favorite-chats{grid-template-columns:1fr;gap:12px}.favorite-chat{min-height:112px}}
+
+
+/* Página 4: cartitas y recuerdos agrupados */
+.diary-letters-page{background:linear-gradient(145deg,#fffafc,#fff0f6 58%,#f7fbff)!important;position:relative;overflow:hidden}
+.diary-letters-page h3{font-size:clamp(1.05rem,2.7vw,1.55rem);line-height:1.45;text-align:center;color:#a43f70;margin:8px auto 12px;max-width:760px}
+.letters-intro{text-align:center;font-size:.92rem;line-height:1.5;color:#87506a;margin:0 auto 18px;max-width:620px}
+.letter-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:760px;margin:18px auto 14px;align-items:stretch}
+.letter-photo-card{position:relative;min-width:0;padding:7px;border:1px solid #efb4ca;border-radius:14px;background:#fff;box-shadow:0 5px 13px #9b47651c;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;animation:letterPop .55s cubic-bezier(.2,.8,.2,1) both;transition:transform .2s,box-shadow .2s}
+.letter-photo-card:nth-child(2){animation-delay:.08s}.letter-photo-card:nth-child(3){animation-delay:.16s}.letter-photo-card:nth-child(4){animation-delay:.24s}.letter-photo-card:nth-child(5){animation-delay:.32s}.letter-photo-card:nth-child(6){animation-delay:.4s}.letter-photo-card:nth-child(7){animation-delay:.48s}
+.letter-photo-card:hover,.letter-photo-card:focus-visible{transform:translateY(-3px) scale(1.025);box-shadow:0 9px 20px #9b47652b;outline:2px solid #e99bb9;outline-offset:2px}
+.letter-photo-card img{width:100%;height:clamp(90px,19vw,185px);object-fit:contain;border-radius:8px;background:#fffafc}
+/* Solo la miniatura de la Imagen 6 queda borrosa; las demás imágenes y cartas conservan su contenido. */
+.letter-photo-card:nth-child(6) img{filter:blur(5px);transform:scale(.97)}
+/* Al ampliar la Imagen 6, se mantiene borrosa la foto, no el sobre ni el contenido de su carta. */
+#letter-detail-viewer.image-six-blurred #letter-detail-image{filter:blur(5px);transform:scale(.985)}
+#letter-detail-image{transition:filter .25s ease,transform .25s ease}
+.letter-photo-number{display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:25px;padding:3px 9px;border-radius:99px;background:#f8c9dc;color:#74334f;font:bold .83rem Arial,sans-serif}
+.letter-photo-caption{font: .77rem Arial,sans-serif;color:#81546a;text-align:center;line-height:1.25}
+@keyframes letterPop{from{opacity:0;transform:translateY(16px) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+.letter-detail-viewer{position:fixed;inset:0;z-index:99999;background:#210f1deF;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(5px)}
+.letter-detail-viewer[hidden]{display:none!important}.letter-detail-card{position:relative;width:min(94vw,820px);max-height:94vh;overflow:auto;border:2px solid #f0b4cc;border-radius:20px;background:#fff8fb;padding:18px 14px 16px;text-align:center;box-shadow:0 18px 60px #0007;animation:diaryPageReveal .28s ease both}
+.letter-detail-card h4{margin:4px 42px 12px;color:#a43f70;font-size:1.1rem}.letter-detail-card img{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:0 auto 14px;border-radius:9px;background:white}
+
+.letter-detail-layout{display:flex;align-items:center;justify-content:center;gap:16px;margin:0 auto 14px;max-width:100%}
+.letter-detail-layout #letter-detail-image{max-width:min(64%,560px);margin:0;max-height:68vh}
+.letter-envelope-wrap{display:none;flex:0 0 auto;align-items:center;justify-content:center;flex-direction:column;gap:7px;min-width:100px}
+.letter-envelope-wrap.visible{display:flex}
+.letter-inline-message{display:none;flex:1;max-width:340px;padding:18px 14px;border:2px solid #f3a6c5;border-radius:24px;background:linear-gradient(145deg,#fff0f6,#ffd9e8);color:#74334f;font-size:clamp(1rem,3.4vw,1.35rem);font-weight:700;line-height:1.5;text-align:center;box-shadow:0 5px 0 #e58ab0;animation:diaryPageReveal .3s ease both}
+.letter-inline-message.visible{display:block}
+.letter-inline-message .message-heart{display:block;font-size:1.7rem;margin-bottom:8px}
+@media(max-width:520px){.letter-inline-message{font-size:.95rem;padding:12px 9px;line-height:1.4;max-width:48%}}
+.letter-envelope-button{border:0;background:transparent;padding:6px;display:flex;flex-direction:column;align-items:center;gap:6px;color:#a43f70;animation:envelopeBob 2.3s ease-in-out infinite}
+.letter-envelope-icon{font-size:clamp(3.4rem,9vw,5.6rem);filter:drop-shadow(0 5px 5px #c95c8c35);line-height:1}
+.letter-envelope-label{font:bold .8rem Arial,sans-serif;background:#fce2ec;border:1px solid #efb4ca;border-radius:99px;padding:6px 10px}
+@keyframes envelopeBob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-6px) rotate(2deg)}}
+.letter-message-viewer{position:fixed;inset:0;z-index:100001;background:#210f1deF;display:flex;align-items:center;justify-content:center;padding:14px;backdrop-filter:blur(6px)}
+.letter-message-viewer[hidden]{display:none!important}
+.letter-message-card{position:relative;width:min(94vw,700px);max-height:94vh;overflow:auto;border:2px solid #f0b4cc;border-radius:20px;background:#fff8fb;padding:48px 12px 12px;box-shadow:0 18px 60px #0007;animation:diaryPageReveal .28s ease both}
+.letter-message-card img{display:block;width:100%;height:auto;max-height:82vh;object-fit:contain;margin:auto;border-radius:10px}
+.special-letter-text{margin:10px auto 4px;padding:22px 18px;max-width:560px;border:2px solid #f3a6c5;border-radius:24px;background:linear-gradient(145deg,#fff0f6,#ffd9e8);color:#74334f;font-size:clamp(1.15rem,4vw,1.65rem);font-weight:700;line-height:1.55;text-align:center;box-shadow:0 6px 0 #e58ab0;animation:diaryPageReveal .35s ease both}.special-letter-text[hidden]{display:none!important}
+@media(max-width:520px){.letter-detail-layout{gap:8px;align-items:center}.letter-detail-layout #letter-detail-image{max-width:calc(100% - 82px);max-height:60vh}.letter-envelope-wrap{min-width:68px}.letter-envelope-icon{font-size:3.1rem}.letter-envelope-label{font-size:.68rem;padding:5px 7px}}
+
+.letter-detail-close{position:absolute;right:9px;top:9px;border:0;border-radius:50%;width:36px;height:36px;background:#f8d2e1;color:#74334f;font-size:1.1rem}
+.letter-detail-nav{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}.letter-detail-nav button{border:1px solid #e9a4bf;border-radius:99px;padding:8px 14px;background:#fce2ec;color:#74334f}
+@media(max-width:480px){.letter-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.letter-photo-card{padding:6px}.letter-photo-card img{height:clamp(105px,32vw,170px)}.letter-photo-caption{font-size:.72rem}.diary-letters-page{padding:18px 12px!important}}
+
+.diary-thanks-page{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:520px;padding:clamp(24px,5vw,56px);background:radial-gradient(circle at 15% 15%,#fff 0 5%,transparent 20%),linear-gradient(145deg,#fff5fa,#ffe0ee 55%,#fff8fc);position:relative;overflow:hidden}
+.diary-thanks-page:before,.diary-thanks-page:after{content:"♡  ✦  🩵  ✦  ♡";color:#d94f91;opacity:.5;letter-spacing:.35em;font-size:clamp(1rem,3vw,1.5rem);padding:12px}
+.diary-thanks-message{font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.3rem,4vw,2.25rem);line-height:1.55;font-weight:700;color:#a52e70;text-shadow:0 2px 0 #fff;margin:18px auto;max-width:650px}
+.diary-return-audios{display:flex;justify-content:center;margin:18px auto 8px;padding:0 12px}
+.diary-return-audios button{border:1px solid #e9a9c9;border-radius:999px;background:linear-gradient(135deg,#fff,#ffe5f1);color:#8f2c64;padding:13px 22px;min-height:48px;font-weight:700;box-shadow:0 6px 18px #a43b7820;touch-action:manipulation}
+.diary-return-audios button:focus-visible{outline:3px solid #7c2e58;outline-offset:4px}
+@media(max-width:600px){.diary-thanks-page{min-height:430px}.diary-return-audios button{width:100%;max-width:360px}}
+
+
+/* Sección 04: casa Gacha. Aislada para no alterar las otras experiencias. */
+#player.house-mode .panel > :not(#house-experience){display:none!important}
+#house-experience[hidden]{display:none!important}
+#house-experience{max-width:1100px;margin:18px auto 30px;padding:clamp(12px,3vw,24px);text-align:center;background:linear-gradient(145deg,#fff4fa,#eafaff);border:2px solid #f1c6e0;border-radius:24px;box-shadow:0 14px 36px #5b41601a;color:#503e58}
+.house-heading{font-size:clamp(1.4rem,4vw,2.2rem);margin:.25rem 0 .35rem;color:#a64d87}
+.house-subtitle{margin:.3rem auto 1rem;max-width:680px;line-height:1.5}
+.house-scene{position:relative;max-width:900px;margin:0 auto;overflow:hidden;border-radius:18px;box-shadow:0 8px 24px #49344b30;line-height:0}
+.house-scene img{display:block;width:100%;height:auto}
+.house-door-hit{position:absolute;top:30%;height:48%;width:18%;border:2px solid transparent;border-radius:12px;background:#fff0;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.house-door-hit:hover,.house-door-hit:focus-visible{background:#ffffff20;border-color:#fff8;transform:translateY(-3px);outline:3px solid #fff9;outline-offset:1px}
+.house-door-hit.door-one{left:27%}.house-door-hit.door-two{left:47%}.house-door-hit.door-three{left:68%}
+.house-door-label{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);padding:.38rem .75rem;border-radius:999px;background:#fff0f8eF;color:#754c70;font-weight:800;font-size:clamp(.7rem,2vw,.95rem);white-space:nowrap;line-height:1.2;box-shadow:0 3px 10px #55334a20}
+.house-controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:15px auto 4px}
+.house-controls button,.house-modal button{border:1px solid #dba6ce;border-radius:999px;padding:.75rem 1.05rem;background:#fff;color:#704567;font-weight:700;cursor:pointer}
+.house-audio{width:min(620px,100%);margin:14px auto 6px;display:block}
+.house-audio-note{font-size:.85rem;color:#806780;margin:.3rem 0}
+.house-modal[hidden]{display:none!important}.house-modal{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;padding:18px;background:#20172bc9}
+.house-modal-card{position:relative;width:min(440px,100%);padding:24px 20px;border-radius:22px;background:linear-gradient(145deg,#fff7fc,#f0fbff);box-shadow:0 20px 60px #0004;line-height:1.5;text-align:center;animation:housePop .3s ease-out}
+.house-modal-card h3{color:#a64d87;margin:.2rem 0 .65rem}.house-modal-card p{margin:.5rem 0 1rem}
+@keyframes housePop{from{opacity:0;transform:scale(.92) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@media(max-width:520px){.house-door-hit{border-radius:6px}.house-door-label{bottom:5%;padding:.25rem .42rem}.house-scene{border-radius:12px}}
+
+
+
+/* Transición interactiva exclusiva de la puerta 1 de la sección 4 */
+#aquarium-transition[hidden]{display:none!important}
+#aquarium-transition{position:fixed;inset:0;z-index:10001;display:grid;place-items:center;overflow:hidden;padding:24px;background:radial-gradient(ellipse at center,#168ed0 0%,#07356c 48%,#100f38 100%);color:#effcff;text-align:center;}
+#aquarium-transition.active .aquarium-transition-content{animation:aquariumDoorReveal 1.05s cubic-bezier(.2,.8,.2,1) both}
+.aquarium-transition-content{position:relative;z-index:2;width:min(520px,100%);padding:28px 20px;border:2px solid #9eeeff;border-radius:28px;background:#061b4caa;box-shadow:0 0 45px #3bd9ff70}
+.aquarium-transition-title{font-size:clamp(1.5rem,6vw,2.6rem);font-weight:900;text-shadow:0 0 18px #3ad7ff;margin:.4rem 0}
+.aquarium-transition-subtitle{font-size:1rem;line-height:1.5;margin:.6rem 0 0}
+.aquarium-transition-whale{font-size:clamp(3.4rem,12vw,6rem);display:block;filter:drop-shadow(0 0 16px #5fe8ff);animation:aquariumWhaleFloat 1.4s ease-in-out infinite}
+.aquarium-transition-bubbles{position:absolute;inset:0;pointer-events:none;opacity:.75;background-image:radial-gradient(circle,#b9f6ff 0 3px,transparent 4px),radial-gradient(circle,#b9f6ff 0 2px,transparent 3px),radial-gradient(circle,#b9f6ff 0 4px,transparent 5px);background-size:95px 130px,137px 170px,183px 210px;background-position:10px 100%,55px 110%,95px 105%;animation:aquariumBubbles 1.15s linear infinite}
+@keyframes aquariumDoorReveal{0%{opacity:0;transform:scale(.84) translateY(22px);filter:blur(8px)}55%{opacity:1;filter:blur(0)}100%{opacity:1;transform:scale(1) translateY(0);filter:blur(0)}}
+@keyframes aquariumWhaleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes aquariumBubbles{from{transform:translateY(24px)}to{transform:translateY(-32px)}}
+@media(prefers-reduced-motion:reduce){#aquarium-transition.active .aquarium-transition-content,.aquarium-transition-whale,.aquarium-transition-bubbles{animation:none!important}}
+
+/* Puerta 1: acuario romántico de Ronald y Valeria */
+.whale-room{width:min(760px,100%);text-align:center;color:#eafaff}
+.whale-room h3{color:#fff;margin:.1rem 0 .6rem;font-size:clamp(1.25rem,4vw,1.8rem);text-shadow:0 2px 9px #001b46}
+.whale-room .ronald-line{margin:.6rem auto 1rem;max-width:640px;padding:12px 15px;border-radius:18px;background:#e8f8ff;color:#164c80;font-weight:800;line-height:1.5;box-shadow:0 4px 16px #00162c70}
+.whale-tank{position:relative;overflow:hidden;border:5px solid #8deaff;border-radius:18px;background:#063c68;box-shadow:0 0 24px #24cfff80;line-height:0;margin:0 auto 12px;max-width:540px}
+.whale-tank img{display:block;width:100%;height:clamp(230px,45vh,390px);object-fit:cover;object-position:center 42%;animation:whaleBob 4s ease-in-out infinite;}
+.whale-tank:after{content:'🫧   ·  🐟  ·    🫧';position:absolute;left:0;right:0;bottom:8px;font-size:1.5rem;letter-spacing:.5rem;animation:bubbleRise 3s ease-in-out infinite;filter:drop-shadow(0 2px 4px #002746)}
+@keyframes whaleBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-7px) scale(1.015)}}
+@keyframes bubbleRise{0%,100%{transform:translateY(5px);opacity:.7}50%{transform:translateY(-12px);opacity:1}}
+.whale-couple{display:flex;justify-content:center;align-items:center;gap:14px;margin:10px auto;color:#fff;font-weight:800;text-shadow:0 2px 8px #00264a}
+.whale-person{display:grid;place-items:center;gap:3px;min-width:90px}
+.whale-avatar{width:66px;height:66px;display:grid;place-items:center;border-radius:50%;background:#ffffffdc;border:3px solid #8cecff;font-size:2rem;box-shadow:0 0 15px #7be6ff80}
+.whale-heart{font-size:1.6rem;animation:heartBeat 1.4s ease-in-out infinite}
+@keyframes heartBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+.whale-room .together-scene{margin:12px auto;max-width:680px;animation:sceneAppear .7s ease both}
+.whale-room .together-scene img{width:100%;height:auto;border-radius:16px;border:3px solid #9beaff;box-shadow:0 6px 24px #001b4660}
+.whale-room .scene-caption{margin:8px auto 12px;color:#fff;line-height:1.5;font-weight:700}
+.whale-room .whale-action{border:1px solid #9beaff;border-radius:999px;padding:.8rem 1rem;background:#e7fbff;color:#15527d;font-weight:800;cursor:pointer;margin:6px}
+.whale-room .whale-action:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@keyframes sceneAppear{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.whale-tank img,.whale-tank:after,.whale-heart,.whale-room .together-scene{animation:none}}
+
+/* Puerta 1: imagen completa y cartita interactiva */
+.whale-room .whale-tank.has-scene-image{max-width:680px;overflow:hidden}
+.whale-room .whale-tank.has-scene-image:after{display:none}
+.whale-room .whale-tank img.whale-scene-image{display:block;width:100%;height:auto;max-height:none;object-fit:contain;object-position:center;animation:none}
+.aquarium-letter-button{position:absolute;right:10px;top:10px;z-index:3;border:2px solid #b8efff;border-radius:50%;width:54px;height:54px;background:#fffaf0;color:#224b8e;font-size:1.7rem;box-shadow:0 4px 14px #001d4b80;cursor:pointer;animation:letterWiggle 2s ease-in-out infinite}
+.aquarium-letter-button:focus-visible,.aquarium-letter-button:hover{transform:scale(1.08);outline:3px solid #fff}
+.aquarium-letter-note{max-width:540px;margin:12px auto 16px;padding:18px;border:2px dashed #83dfff;border-radius:18px;background:linear-gradient(135deg,#f1fcff,#fff2fa);color:#224b8e;text-align:center;box-shadow:0 8px 24px #002b5a30}
+.aquarium-letter-open{font-size:2.5rem}
+.aquarium-letter-placeholder{font-size:.95rem}
+@keyframes letterWiggle{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+
+/* Puerta 2: escena del castillo Disney, independiente de las demás secciones */
+#house-door-modal .disneyland-scene{position:relative;width:100%;margin:12px auto 16px;overflow:hidden;border-radius:18px;box-shadow:0 8px 26px #4e2c6b35;line-height:0;background:#f9dce9}
+#house-door-modal .disneyland-scene img{display:block;width:100%;height:auto;animation:castleDream 5s ease-in-out infinite alternate}
+#house-door-modal .disney-dialogue{display:inline-block;line-height:1.45;margin:8px auto 14px;padding:12px 18px;border-radius:18px;background:#fff;color:#8c4c85;border:2px solid #efb5dc;font-weight:800;box-shadow:0 4px 16px #9d5e8830}
+#house-door-modal .disney-letter-corner{position:absolute;right:12px;top:12px;z-index:3;line-height:1}
+#house-door-modal .disney-letter-btn{width:54px;height:54px;border:2px solid #fff!important;border-radius:16px!important;background:#fff2f9!important;box-shadow:0 4px 15px #4b234b55;font-size:1.8rem;padding:4px!important;animation:letterWiggle 2.4s ease-in-out infinite}
+#house-door-modal .disney-letter-panel{line-height:1.4;margin:12px auto;padding:14px;border:2px dashed #d9a3d0;border-radius:16px;background:#fff8fd}
+#house-door-modal .disney-letter-panel[hidden]{display:none!important}
+#house-door-modal .disney-letter-preview{display:block;width:auto;max-width:100%;height:auto;max-height:none;object-fit:contain;margin:10px auto;border-radius:12px;box-shadow:0 4px 18px #5a3b6b24}
+#house-door-modal .disney-letter-upload{display:block;width:100%;max-width:360px;margin:10px auto;font-size:.9rem}
+@keyframes castleDream{from{transform:scale(1)}to{transform:scale(1.025)}}
+@keyframes letterWiggle{0%,100%{transform:rotate(0)}50%{transform:rotate(5deg)}}
+@media(prefers-reduced-motion:reduce){#house-door-modal .disneyland-scene img,#house-door-modal .disney-letter-btn{animation:none!important}}
+
+</style>
+<style>
+#player.diary-mode .player-layout,#player.diary-mode #flower-game,#player.diary-mode #memories,#player.diary-mode #surprise-scene,#player.diary-mode .nav,#player.diary-mode .pixel-note,#player.diary-mode .footer-note,#player.diary-mode #paparazzi-experience{display:none!important}
+#diary-experience[hidden],#diary-inside[hidden]{display:none!important}
+#diary-experience{margin:20px auto 0;text-align:center}
+.diary-wrap{max-width:900px;margin:auto;padding:clamp(12px,3vw,26px);background:#fff7fb;border:1px solid #efbfd4;border-radius:24px;perspective:1400px}
+.diary-cover{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;width:min(300px,78vw);min-height:370px;margin:24px auto;border:8px solid #8c4267;border-radius:12px 20px 20px 12px;background:linear-gradient(145deg,#d88bb1,#9e527b);box-shadow:inset 8px 0 0 #f4c5dc,8px 12px 0 #71355155,0 18px 30px #71355122;color:white;cursor:pointer;transition:transform .5s,box-shadow .5s;animation:diaryFloat 3s ease-in-out infinite}
+.diary-cover:hover{transform:translateY(-5px) rotate(-1deg);box-shadow:inset 8px 0 0 #f4c5dc,12px 17px 0 #71355144,0 22px 34px #71355133}
+.diary-cover-placeholder{display:grid;place-items:center;width:78%;min-height:240px;padding:18px;border:1px dashed #fff9;border-radius:8px;background:#ffffff18;font-size:4rem}
+.diary-cover-placeholder small{font:12px Arial,sans-serif;line-height:1.5}
+.diary-cover-label{font:bold 15px Georgia,serif;letter-spacing:.04em}
+@keyframes diaryFloat{50%{transform:translateY(-5px)}}
+.diary-page{box-sizing:border-box;min-width:0;min-height:280px;margin:0;padding:clamp(22px,4vw,42px) clamp(18px,3vw,34px);text-align:left;background:repeating-linear-gradient(#fffdf8 0 31px,#eadce2 32px);box-shadow:0 5px 18px #65334a18;animation:sceneIn .8s ease both}
+.diary-book{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:820px;margin:18px auto 22px;padding:12px;background:#8c4267;border-radius:8px 14px 14px 8px;box-shadow:0 12px 28px #65334a25;transform-origin:center;animation:diaryBookOpen .85s cubic-bezier(.2,.75,.25,1) both}
+.diary-book .diary-page:first-child{border-right:1px solid #dfc4cf;border-radius:4px 0 0 4px}
+.diary-book .diary-page:last-child{border-radius:0 4px 4px 0}
+.diary-page p{line-height:2.05;white-space:pre-line}.diary-message{font-family:Georgia,serif;font-size:clamp(1.1rem,2.5vw,1.45rem);font-weight:700;color:#874263;text-align:center;line-height:2.05!important}
+.diary-page-number{display:block;margin-top:25px;text-align:center;font-size:.8rem;color:#a9788d}
+.diary-heart{font-size:2rem;color:#c64e88}.diary-page h3{color:#a23c70;text-align:center}
+#diary-audio{display:block;width:100%;max-width:500px;margin:15px auto}.diary-playing{font-size:.9rem}
+.diary-wrap.is-open .diary-cover{animation:diaryCoverFold .7s ease forwards;pointer-events:none}
+@keyframes diaryCoverFold{0%{opacity:1;transform:perspective(900px) rotateY(0) scale(1);max-height:450px}70%{opacity:.8;transform:perspective(900px) rotateY(-95deg) scale(.94)}100%{opacity:0;transform:perspective(900px) rotateY(-125deg) scale(.88);max-height:0;min-height:0;height:0;margin:0 auto;padding-top:0;padding-bottom:0;border-width:0;overflow:hidden}}
+@keyframes diaryBookOpen{from{opacity:0;transform:rotateX(8deg) scale(.94)}to{opacity:1;transform:rotateX(0) scale(1)}}
+@media(max-width:560px){.diary-book{grid-template-columns:1fr;padding:7px}.diary-book .diary-page:first-child{border-right:0;border-bottom:1px solid #dfc4cf;border-radius:4px 4px 0 0}.diary-book .diary-page:last-child{border-radius:0 0 4px 4px}.diary-page{min-height:220px}.diary-cover{min-height:320px}.diary-cover-placeholder{min-height:205px}}
+
+/* Diario: cambio de página y sobres interactivos */
+.diary-book{display:block;position:relative;min-height:300px;overflow:hidden}
+.diary-spread{display:grid;grid-template-columns:1fr 1fr;gap:0;transform-origin:left center}
+.diary-spread[hidden]{display:none!important}
+.diary-spread.is-turning-forward{animation:diaryTurnForward .58s cubic-bezier(.2,.7,.2,1)}
+.diary-spread.is-turning-back{animation:diaryTurnBack .58s cubic-bezier(.2,.7,.2,1)}
+@keyframes diaryTurnForward{0%{opacity:1;transform:perspective(1200px) rotateY(0);filter:brightness(1)}100%{opacity:0;transform:perspective(1200px) rotateY(-92deg);filter:brightness(.75)}}
+@keyframes diaryTurnBack{0%{opacity:1;transform:perspective(1200px) rotateY(0)}100%{opacity:0;transform:perspective(1200px) rotateY(92deg)}}
+@keyframes diaryPageReveal{from{opacity:.2;transform:perspective(1200px) rotateY(18deg)}to{opacity:1;transform:perspective(1200px) rotateY(0)}}
+.diary-first-page{border-radius:4px 0 0 4px!important}
+.diary-quiet-page{border-radius:0 4px 4px 0!important}
+.diary-soft-message{font-size:clamp(1rem,2vw,1.2rem)}
+.diary-memory-page{grid-column:1/-1;border-radius:4px!important;min-height:350px}
+.diary-memory-page h3{font-size:clamp(1.2rem,3vw,1.65rem);line-height:1.45;margin:8px auto 12px}
+.diary-memory-intro{max-width:650px;margin:0 auto 22px;text-align:center;line-height:1.7;color:#74455a}
+.diary-envelopes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,2vw,18px);align-items:start;margin:20px 0 6px}
+.diary-envelope{appearance:none;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:8px;min-width:0;padding:8px 4px;cursor:pointer;color:#63324b;font:inherit;border-radius:14px;transition:transform .22s,background .22s}
+.diary-envelope:hover,.diary-envelope:focus-visible{transform:translateY(-5px) scale(1.025);background:#ffffffa8;outline:2px solid #dca3bf;outline-offset:1px}
+.envelope-art{position:relative;display:grid;place-items:center;width:min(100%,145px);aspect-ratio:1.25;background:linear-gradient(145deg,var(--env-light),var(--env-main));border:2px solid var(--env-dark);border-radius:9px 9px 13px 13px;box-shadow:0 7px 13px #63324b20;overflow:hidden}
+.envelope-art:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,transparent 49%,var(--env-dark) 50%,transparent 52%),linear-gradient(215deg,transparent 49%,var(--env-dark) 50%,transparent 52%);opacity:.65}
+.envelope-art:after{content:"";position:absolute;top:-38%;left:15%;width:70%;height:70%;background:var(--env-light);border:2px solid var(--env-dark);transform:rotate(45deg);border-radius:4px;opacity:.85}
+.envelope-heart{position:relative;z-index:2;font-size:clamp(1.7rem,4vw,2.6rem);color:var(--env-dark);text-shadow:0 1px 0 white}
+.envelope-pink{--env-light:#ffe5f0;--env-main:#f3a8c8;--env-dark:#bd4d83}
+.envelope-blue{--env-light:#e2f3ff;--env-main:#8cc8ed;--env-dark:#3679b3}
+.diary-envelope:nth-child(2) .envelope-art,.diary-envelope:nth-child(4) .envelope-art{filter:saturate(.95)}
+.envelope-label{font-weight:800;font-size:clamp(.78rem,1.8vw,.98rem);text-align:center}
+.envelope-hint{font-size:clamp(.68rem,1.5vw,.8rem);text-align:center;line-height:1.4;color:#8a6476}
+.diary-page-controls{display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,22px);margin:14px auto 22px}
+.diary-page-controls button{border:1px solid #dba2bf;border-radius:999px;background:#fff0f7;color:#874263;padding:10px 15px;font-weight:700;cursor:pointer}
+.diary-page-controls button:disabled{opacity:.4;cursor:default}
+#diary-page-indicator{font-size:.9rem;color:#98677f;font-weight:700;min-width:35px;text-align:center}
+.diary-media-viewer[hidden]{display:none!important}
+.diary-media-viewer{position:fixed;z-index:9999;inset:0;background:#281521c9;display:grid;place-items:center;padding:16px}
+.diary-media-card{position:relative;background:#fff7fb;border:2px solid #e7b6ce;border-radius:20px;width:min(780px,100%);max-height:92vh;overflow:auto;padding:22px;box-shadow:0 20px 70px #0005}
+.diary-media-card h3{text-align:center;color:#a23c70;margin:8px 36px 16px}
+.diary-media-card video{display:block;width:100%;max-height:68vh;object-fit:contain;background:#171019;border-radius:12px}
+.diary-media-close{position:absolute;right:12px;top:12px;width:36px;height:36px;border:0;border-radius:50%;background:#f6d9e7;color:#874263;font-size:1.1rem;cursor:pointer}
+#diary-media-note{text-align:center;color:#874263;line-height:1.6}
+@media(max-width:600px){.diary-spread{grid-template-columns:1fr}.diary-first-page{border-right:0!important;border-bottom:1px solid #dfc4cf!important;border-radius:4px 4px 0 0!important}.diary-quiet-page{border-radius:0 0 4px 4px!important}.diary-envelopes{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.diary-memory-page{min-height:0}.diary-page-controls button{padding:9px 11px;font-size:.86rem}}
+@media(prefers-reduced-motion:reduce){.diary-spread.is-turning-forward,.diary-spread.is-turning-back{animation-duration:.01ms}}
+
+
+.favorite-chats{display:flex;flex-direction:column;gap:13px;max-width:650px;margin:22px auto}
+.favorite-chat{position:relative;align-self:flex-start;max-width:92%;padding:13px 18px 12px;border:0;border-radius:18px 18px 18px 5px;background:#f8dce5;color:#442631;text-align:left;box-shadow:0 5px 0 #c84f68;cursor:pointer;animation:diaryFloat 3s ease-in-out infinite;font:inherit}
+.favorite-chat:nth-child(even){align-self:flex-end;border-radius:18px 18px 5px 18px;background:#f2b5ca;animation-delay:.45s}
+.favorite-chat span,.favorite-chat small{display:block;line-height:1.45}.favorite-chat small{margin-top:4px;font-size:.78rem;color:#8d5367}.favorite-chat b{position:absolute;right:-11px;bottom:-9px;font-size:19px}
+.favorite-chat-reveal{position:relative;margin:24px auto 4px;padding:18px;max-width:540px;border:2px solid #e7a6bd;border-radius:18px;background:#fff8fb;box-shadow:0 10px 24px #71355122;text-align:center;animation:diaryPageReveal .35s ease both}
+.favorite-chat-reveal[hidden]{display:none}.favorite-chat-reveal img{display:block;max-width:100%;max-height:65vh;object-fit:contain;margin:12px auto;border-radius:10px}.favorite-chat-close{position:absolute;right:8px;top:8px;border:0;border-radius:50%;background:#f7d5e2;padding:7px 10px;cursor:pointer}.favorite-chat-upload{display:inline-block;margin-top:12px;padding:10px 14px;border-radius:999px;background:#f4c3d5;color:#6b3049;font-size:.9rem;cursor:pointer}.favorite-chat-upload input{display:block;max-width:100%;margin-top:8px;font-size:.8rem}
+@media(max-width:620px){.diary-book{display:block}.favorite-chat{max-width:95%}}
+</style>
+<style> .diary-cover-art{position:relative;display:block;width:88%;height:clamp(220px,48vh,390px);min-height:220px;padding:0!important;overflow:hidden;border:2px solid #fff9!important;background:#ffffff18!important;box-shadow:0 4px 18px #3d234455}.diary-cover-art img{display:block;width:100%;height:100%;min-height:220px;object-fit:cover;object-position:center}.diary-cover-art-overlay{position:absolute;right:10px;top:8px;color:#fff;font-size:2rem;text-shadow:0 2px 8px #0008;pointer-events:none}@media(max-width:560px){.diary-cover-art{width:88%;height:clamp(260px,48vh,430px)}} </style>
+<style>
+/* Corrección de desplazamiento exclusiva de la sección 4 */
+body{overflow-y:auto!important}
+#player.house-mode{display:block!important;min-height:100vh;height:auto;overflow:visible!important;padding:16px 10px 28px;align-items:initial;justify-content:initial}
+#player.house-mode>.panel{width:min(1100px,100%);max-width:100%;margin:0 auto;overflow:visible!important}
+#player.house-mode #house-experience{height:auto;max-height:none;overflow:visible!important;margin-bottom:24px}
+</style>
+<style>.aquarium-letter-image{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain;margin:10px auto 14px;border-radius:12px;box-shadow:0 4px 16px #002b5a24}@media(max-width:520px){.aquarium-letter-note{padding:12px}.aquarium-letter-image{max-height:68vh}}</style>
+<style id="section4-door1-scroll-and-letter-fix">
+/* Sección 4: la sorpresa de la puerta 1 puede desplazarse en pantallas pequeñas. */
+#house-door-modal:not([hidden]){
+  display:grid!important;
+  position:fixed!important; inset:0!important;
+  z-index:100000!important;
+  place-items:start center!important;
+  overflow-y:auto!important; overflow-x:hidden!important;
+  padding: max(12px, env(safe-area-inset-top)) 12px max(20px, env(safe-area-inset-bottom))!important;
+  box-sizing:border-box!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior:contain;
+}
+#house-door-modal .house-modal-card{
+  width:min(760px,100%)!important; max-width:100%!important;
+  max-height:none!important; height:auto!important;
+  overflow:visible!important; min-height:0!important;
+  box-sizing:border-box!important; margin:8px auto 20px!important;
+}
+#house-door-modal .whale-tank.has-scene-image{width:100%; max-width:680px; margin:10px auto;}
+#house-door-modal .aquarium-letter-note[hidden]{display:none!important;}
+#house-door-modal .aquarium-letter-image{
+  display:block!important; width:100%!important; height:auto!important;
+  max-width:520px!important; max-height:none!important; object-fit:contain!important;
+  margin:10px auto 14px!important; visibility:visible!important; opacity:1!important;
+}
+@media(max-width:520px){
+  #house-door-modal:not([hidden]){padding:10px 9px 20px!important;}
+  #house-door-modal .house-modal-card{padding:18px 12px!important;}
+  #house-door-modal .aquarium-letter-image{width:100%!important;}
+}
+</style>
+</head>
+<body data-independent-section="1">
+<section class="screen active cover" id="cover">
+<div class="eyebrow">un pequeño universo para nosotros</div>
+<h1>Felices<br/>4 meses 💗</h1>
+<p class="subtitle">Cuatro meses contigo, y todavía encuentro nuevas razones para escogerte.</p>
+<button class="main-btn" onclick="openTrack(0)">Pulsa aquí ♡</button>
+<div class="tiny">hecho con mucho amor, para ti</div>
+</section>
+<section class="screen" id="tracks">
+<div class="panel">
+<div class="eyebrow">elige un recuerdo musical</div>
+<h2>Este pedacito es tuyo ♡</h2>
+<p class="subtitle" style="margin:0 auto">El audio 01 termina en la carta. El audio 02 es una experiencia aparte con Paparazzi. ♡</p>
+<div class="tracks">
+<button class="track" onclick="openTrack(0)"><strong>♡ 01 · Nuestro primer audio</strong><span>Virtual Love — Tanin Jazz</span></button>
+<button class="track" onclick="openTrack(1)"><strong>♡ 02 · Nuestra cita con Paparazzi</strong><span>Lady Gaga — Paparazzi (Dubstep remix)</span></button>
+<button class="track" onclick="openTrack(2)"><strong>♡ 03 · Nuestro diario</strong><span>Abre la tapa y escucha nuestra canción</span></button>
+<button class="track" onclick="openTrack(3)"><strong>♡ 04 · La casa de Valeria</strong><span>Entra, elige una puerta y descubre las sorpresas 🩵</span></button>
+</div>
+<button class="ghost-btn" onclick="showScreen('cover')">Volver al inicio</button>
+</div>
+</section>
+<section class="screen" id="player">
+<div class="panel">
+<div class="eyebrow" id="track-kicker">audio 01 · virtual love</div>
+<h2 id="track-title">Una canción para ti 💗</h2>
+<p id="track-desc">Pon la canción y deja que florezcan las palabras.</p>
+<div class="player-layout">
+<div class="vinyl-wrap">
+<div class="vinyl" id="vinyl"><div class="label-disc">♡</div><div class="tonearm"></div></div>
+<div class="progress-note" id="play-state">El disco espera que le des play</div>
+</div>
+<div class="audio-box">
+<strong>🎵 Nuestro audio</strong>
+<p style="font-size:.9rem;line-height:1.5">La canción ya está incluida en esta página. Pulsa reproducir para escucharla.</p>
+<audio controls="" id="audio" preload="auto" src="assets/media_001.mp3"></audio>
+<div class="progress-note">Audio incorporado al archivo: no tienes que seleccionarlo cada vez.</div>
+</div>
+</div>
+<div aria-label="Juego de recolectar flores" id="flower-game">
+<h3>Recolecta florecitas 🌸</h3>
+<p class="game-help">Toca las florecitas que caen mientras aparecen nuestros mensajes.</p>
+<div aria-live="polite" class="score" id="flower-score">Flores recolectadas: 0 🌷</div>
+<div aria-label="Zona de flores que caen" id="flower-rain"></div>
+</div>
+<div class="memories" id="memories">
+<article class="memory"><div aria-label="Lirio de araña rojo" class="flower" role="img"><img alt="Ramo de flores 1" class="bouquet-photo" src="assets/media_002.jpg"/></div><p>Entre 8 mil millones de personas yo te escogí a ti. MUACK</p></article>
+<article class="memory"><div aria-label="Lirio de araña rojo" class="flower" role="img"><img alt="Ramo de flores 2" class="bouquet-photo" src="assets/media_003.jpg"/></div><p>Te amo tanto como amo el color azul.</p></article>
+<article class="memory"><div aria-label="Lirio de araña rojo" class="flower" role="img"><img alt="Ramo de flores 3" class="bouquet-photo" src="assets/media_004.jpg"/></div><p>Jamás te cambiaría por nada en el multiverso. MUACK, TI AMO 💙</p></article>
+<article class="memory"><div aria-label="Lirio de araña rojo" class="flower" role="img"><img alt="Ramo de flores 4" class="bouquet-photo" src="assets/media_005.jpg"/></div><p>Eres el amor de mi vida y el de todas las que pueda llegar a tener.</p></article>
+</div>
+<div aria-live="polite" id="surprise-scene">
+<div class="dog-hearts">♡ ✦ ♡</div>
+<div class="final-gift">
+<button aria-controls="final-surprise-image" aria-expanded="false" class="valeria-envelope-button" id="valeria-envelope-button" onclick="openValeriaEnvelope()" type="button">
+<span aria-hidden="true" class="valeria-envelope"><span class="envelope-name">Valeria</span><span class="envelope-heart">♥</span></span>
+<span class="envelope-instruction">Pulsa aquí para que se abra ♡</span>
+</button>
+<div aria-live="polite" class="final-image-reveal" id="final-image-reveal"><img alt="La sorpresa final para Valeria" class="final-surprise-image" id="final-surprise-image" src="assets/media_006.jpg"/></div>
+</div>
+<div class="valeria-pixel">VALERIA</div>
+<p style="font:13px 'Courier New',monospace;color:#a33b73;margin:4px 0 12px">una sorpresa llena de amor ♡</p>
+<div class="dog-hearts">♡ te amo ♡</div>
+</div>
+<section class="paparazzi-experience" hidden="" id="paparazzi-experience">
+<p class="eyebrow">AUDIO 02 · PAPARAZZI 💗</p>
+<h2>Nuestra cita de exploración</h2>
+<p>Escoge cómo compartimos este momentito juntos. 🩵</p>
+<audio controls="" id="paparazzi-audio" preload="metadata" src="assets/media_007.mp3" style="width:100%;max-width:520px"></audio>
+<p id="paparazzi-status">Parte 1 de 2 · Elige el plan inicial · Medidor: 0%</p>
+<div id="paparazzi-date">
+<section class="pap-scene" id="pap-part-one">
+<h3>Parte 1 · ¿Qué hacemos primero, amorcito? 🍨🎬🏡</h3>
+<p>Primero elegimos nuestro plan para compartir juntitos. Después vendrá la pregunta de tu chico: «¿Qué quieres hacer ahora, mi reina?»</p>
+<div class="pap-intro"><img alt="Chico chibi pixel art de cabello rizado oscuro y piel canela" class="pap-boy-portrait" src="assets/media_008.jpg"/></div>
+<div class="pap-options pap-route-options" id="pap-first-options">
+<button onclick="papChooseFirst('helado')" type="button">🍨 Comer helado juntitos</button>
+<button onclick="papChooseFirst('pelis')" type="button">🎬 Ver pelis y series juntitos</button>
+<button onclick="papChooseFirst('cocinar')" type="button">🏡 Quedarnos en casa cocinando</button>
+</div>
+<div hidden="" id="pap-first-scene"></div>
+</section>
+<section class="pap-scene" hidden="" id="pap-part-two">
+<div class="pap-intro">
+<img alt="Chico chibi pixel art de cabello rizado oscuro y piel canela" class="pap-boy-portrait" src="assets/media_008.jpg"/>
+<h3>¿Qué quieres hacer ahora, mi reina? 💗</h3>
+<p>¡Ya compartimos nuestro primer plan! Ahora elige una sola ruta romántica para continuar esta cita.</p>
+</div>
+<div class="pap-options pap-route-options" id="pap-route-options">
+<button onclick="papChooseRoute(1)" type="button">1) Vamos a casa, amor, y vemos Netflix ♡</button>
+<button onclick="papChooseRoute(2)" type="button">2) Cárgame, ¿sí? 🥺💕</button>
+<button onclick="papChooseRoute(3)" type="button">3) Sorpréndeme, OMEGUITA 💍</button>
+</div>
+<div hidden="" id="paparazzi-choice-display"></div>
+<p id="paparazzi-dialogue">Primero elige nuestro plan, mi reina ♡</p>
+</section>
+<div aria-label="Medidor de obsesión" class="pap-meter"><div id="paparazzi-fill"></div></div>
+<p id="paparazzi-percent">0%</p>
+<div hidden="" id="paparazzi-dog">
+<p>🐶💌 ¡El perrito llegó con el sobre en la boca!</p>
+<button disabled="" id="paparazzi-envelope" onclick="papOpenLetter()" type="button">Abrir la carta (B) 💌</button>
+<div hidden="" id="paparazzi-letter">
+<h3>Carta (B) · Obsesión 💙</h3>
+<img alt="Carta del medidor de obsesión" class="pap-letter-image" src="assets/media_009.jpg"/>
+</div>
+</div>
+</div>
+<div class="paparazzi-return-audios" style="display:flex;justify-content:center;margin:1.2rem auto 0;padding:0 1rem;">
+<button onclick="openTrack(0)" style="border:1px solid #b9e8f4;border-radius:999px;padding:.85rem 1.2rem;background:linear-gradient(135deg,#eafaff,#fff0f8);color:#59445f;font-weight:700;box-shadow:0 4px 14px rgba(74,160,190,.16);cursor:pointer;max-width:100%;" type="button">♡ Volver a los audios / secciones ♡</button>
+</div>
+</section>
+<div class="nav">
+<button class="ghost-btn" onclick="openTrack(0)">Elegir otro audio</button>
+<button class="ghost-btn" onclick="resetMemories()">Volver a ver las flores</button>
+</div>
+<div class="pixel-note">Mensajes con estilo pixelado · borrador editable</div>
+<div class="footer-note">Borrador provisional · este audio seguirá creciendo: podremos añadir más escenas, efectos y mensajes sincronizados.</div>
+<section aria-label="Experiencia 03: diario romántico" hidden="" id="diary-experience">
+<div class="diary-wrap">
+<div class="eyebrow">audio 03 · nuestro diario</div>
+<h2>Un pequeño diario para ti ♡</h2>
+<p>Hay una canción esperando dentro de estas páginas...</p>
+<button class="diary-cover" id="diary-cover" onclick="openDiary()" type="button">
+<span class="diary-cover-placeholder diary-cover-art"><img alt="Portada romántica del diario" src="assets/media_010.jpg"><span class="diary-cover-art-overlay">♡</span></img></span>
+<span class="diary-cover-label">Abrir nuestro diario ✨</span>
+</button>
+<div hidden="" id="diary-inside">
+<div aria-label="Diario abierto" class="diary-book" id="diary-book">
+<section aria-label="Página 1" class="diary-spread is-current" id="diary-spread-1">
+<article class="diary-page diary-first-page">
+<span class="diary-heart">♡</span><h3>Para mi Valeria</h3>
+<p class="diary-message">Estos 4 meses han sido increíbles y verdaderamente hermosos Valeria  MUACK 🩵 TI AMO 🩵</p>
+<span class="diary-page-number">Página 1 · nuestros 4 meses</span>
+</article>
+<article class="diary-page diary-quiet-page">
+<span class="diary-heart">🩵</span>
+<h3>Un recuerdo muy nuestro</h3>
+<p class="diary-message diary-soft-message">Y esto apenas es el comienzo de todas las cositas bonitas que quiero guardar contigo. ✨</p>
+<span class="diary-page-number">Siempre tú ♡</span>
+</article>
+</section>
+<section aria-label="Página 2" class="diary-spread" hidden="" id="diary-spread-2">
+<div class="diary-page diary-memory-page">
+<span class="diary-heart">♡</span>
+<h3>Tus videitos pros me hacen muy feliz jsjs MUACK 🩵</h3>
+<p class="diary-memory-intro">Abre cada sobre para ver tus videitos. Las fotos tendrán su propio rinconcito después, agrupadas para deslizar de lado a lado. 💗</p>
+<div class="diary-envelopes">
+<button aria-label="Abrir sobre rosa: videito 1" class="diary-envelope envelope-pink" onclick="openDiaryVideo(0)" type="button">
+<span class="envelope-art"><span class="envelope-heart">♡</span></span>
+<span class="envelope-label">Videito 1</span>
+<span class="envelope-hint">Un recuerdo para ti ▶</span>
+</button>
+<button aria-label="Abrir sobre azul: videito 2" class="diary-envelope envelope-blue" onclick="openDiaryVideo(1)" type="button">
+<span class="envelope-art"><span class="envelope-heart">♡</span></span>
+<span class="envelope-label">Videito 2</span>
+<span class="envelope-hint">Otro recuerdo ▶</span>
+</button>
+<button aria-label="Abrir sobre rosa con nuestras fotos" class="diary-envelope envelope-pink" onclick="openDiaryPhotos()" type="button">
+<span class="envelope-art"><span class="envelope-heart">♡</span></span>
+<span class="envelope-label">Fotos bonitas</span>
+<span class="envelope-hint">Un mensajito para ti 🩵</span>
+</button>
+<button aria-label="Abrir sobre azul con más fotitos y mensaje especial" class="diary-envelope envelope-blue" onclick="openDiaryPhotoPlaceholder(3)" type="button">
+<span class="envelope-art"><span class="envelope-heart">♡</span></span>
+<span class="envelope-label">Fotitos para ti</span>
+<span class="envelope-hint">Un mensajito para ti 🩵</span>
+</button>
+</div>
+<span class="diary-page-number">Página 2 · tus videitos y nuestros recuerdos</span>
+</div>
+</section>
+<section aria-label="Página 3" class="diary-spread chats-spread" hidden="" id="diary-spread-3">
+<article class="diary-page diary-chats-page">
+<span class="diary-heart">💗</span>
+<h3>Chats que te gustaron amorcito jeje</h3>
+<p class="diary-memory-intro">Toca cada mensajito para descubrir su captura, mi amorcito. ♡</p>
+<div aria-label="Cinco chats favoritos" class="favorite-chats">
+<button aria-label="Abrir Chat 1: Te amo" class="favorite-chat" onclick="toggleFavoriteChat(1)" type="button"><span aria-hidden="true" class="chat-bubble-icon">🗨</span><span class="favorite-chat-label">Te amo 🩵</span><small>Toca para ver la captura ♡</small></button>
+<button aria-label="Abrir Chat 2: hamburguesa triple" class="favorite-chat" onclick="toggleFavoriteChat(2)" type="button"><span aria-hidden="true" class="chat-bubble-icon">🗨</span><span class="favorite-chat-label">Hamburguesa triple</span><small>Toca para ver la captura ♡</small></button>
+<button aria-label="Abrir Chat 3: los demandaban" class="favorite-chat" onclick="toggleFavoriteChat(3)" type="button"><span aria-hidden="true" class="chat-bubble-icon">🗨</span><span class="favorite-chat-label">*los demandaban*</span><small>Toca para ver la captura ♡</small></button>
+<button aria-label="Abrir Chat 4: conversación más normal" class="favorite-chat" onclick="toggleFavoriteChat(4)" type="button"><span aria-hidden="true" class="chat-bubble-icon">🗨</span><span class="favorite-chat-label">La conversación más normal</span><small>Toca para ver la captura ♡</small></button>
+<button aria-label="Abrir Chat 5: tercer color favorito" class="favorite-chat" onclick="toggleFavoriteChat(5)" type="button"><span aria-hidden="true" class="chat-bubble-icon">🗨</span><span class="favorite-chat-label">Tercer color favorito</span><small>Toca para ver la captura ♡</small></button>
+</div>
+<div aria-label="Captura del chat seleccionado" class="favorite-chat-reveal" hidden="" id="favorite-chat-reveal" role="dialog">
+<button aria-label="Cerrar imagen" class="favorite-chat-close" onclick="closeFavoriteChat()" type="button">✕</button>
+<h4 id="favorite-chat-title">Nuestro chat ♡</h4>
+<img alt="Captura de nuestro chat" hidden="" id="favorite-chat-image"/>
+</div>
+<span class="diary-page-number">Página 3 · nuestros chats favoritos ♡</span>
+</article>
+</section>
+<section aria-label="Página 4" class="diary-spread letters-spread" hidden="" id="diary-spread-4">
+<article class="diary-page diary-letters-page">
+<span class="diary-heart">🩵</span>
+<h3>Jamas olvidaré todo lo que has hecho por mi mucho menos cuánto me amas y tampoco las cartitas que me has hecho que tan feliz me hacen jsjs MUACK 🩵 GRAXIAS 🩵</h3>
+<p class="letters-intro">Todas juntitas en esta página, para que puedas verlas al mismo tiempo. Toca cualquiera para verla en grande, mi amorcito. 🩵</p>
+<div aria-label="Siete cartitas y recuerdos numerados" class="letter-gallery">
+<button aria-label="Ver Imagen 1 en detalle" class="letter-photo-card" onclick="openLetterDetail(1)" type="button">
+<span class="letter-photo-number">Imagen 1</span>
+<img alt="Cartita o recuerdo 1" loading="eager" src="assets/media_011.jpg"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+<button aria-label="Ver Imagen 2 en detalle" class="letter-photo-card" onclick="openLetterDetail(2)" type="button">
+<span class="letter-photo-number">Imagen 2</span>
+<img alt="Cartita o recuerdo 2" loading="eager" src="assets/media_012.jpg"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+<button aria-label="Ver Imagen 3 en detalle" class="letter-photo-card" onclick="openLetterDetail(3)" type="button">
+<span class="letter-photo-number">Imagen 3</span>
+<img alt="Cartita o recuerdo 3" loading="eager" src="assets/media_013.jpg"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+<button aria-label="Ver Imagen 4 en detalle" class="letter-photo-card" onclick="openLetterDetail(4)" type="button">
+<span class="letter-photo-number">Imagen 4</span>
+<img alt="Cartita o recuerdo 4" loading="eager" src="assets/media_014.webp"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+<button aria-label="Ver Imagen 5 en detalle" class="letter-photo-card" onclick="openLetterDetail(5)" type="button">
+<span class="letter-photo-number">Imagen 5</span>
+<img alt="Cartita o recuerdo 5" loading="eager" src="assets/media_015.webp"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+<button aria-label="Ver Imagen 6 en detalle" class="letter-photo-card" onclick="openLetterDetail(6)" type="button">
+<span class="letter-photo-number">Imagen 6</span>
+<img alt="Cartita o recuerdo 6" loading="eager" src="assets/media_016.webp"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+<button aria-label="Ver Imagen 7 en detalle" class="letter-photo-card" onclick="openLetterDetail(7)" type="button">
+<span class="letter-photo-number">Imagen 7</span>
+<img alt="Cartita o recuerdo 7" loading="eager" src="assets/media_017.webp"/>
+<span class="letter-photo-caption">Tocar para ampliar ♡</span>
+</button>
+</div>
+<span class="diary-page-number">Página 4 · nuestras cartitas bonitas 🩵</span>
+</article>
+</section>
+<section aria-label="Página 5" class="diary-spread thanks-spread" hidden="" id="diary-spread-5">
+<article class="diary-page diary-thanks-page">
+<span aria-hidden="true" class="diary-heart">🩵</span>
+<h3>Para la mejor novia del multiverso</h3>
+<p class="diary-thanks-message">GRACIAS POR TODO ESTOS 4 MESES HAS SIDO LA MEJOR NOVIA DEL MULTIVERSO Y SIN DUDA LA MEJOR PERSONA QUE JAMAS E CONOCIDO ENSERIO VALERIA TE AMO 🩵 MUACK 🩵</p>
+<span class="diary-page-number">Página 5 · gracias por estos 4 meses ♡</span>
+</article>
+</section>
+</div>
+<div aria-label="Navegación del diario" class="diary-page-controls">
+<button aria-label="Página anterior" disabled="" id="diary-prev-page" onclick="turnDiaryPage(-1)" type="button">← Anterior</button>
+<span id="diary-page-indicator">1 / 5</span>
+<button aria-label="Pasar a la siguiente página" id="diary-next-page" onclick="turnDiaryPage(1)" type="button">Siguiente página →</button>
+</div>
+<div aria-label="Recuerdo del diario" aria-modal="true" class="diary-media-viewer" hidden="" id="diary-media-viewer" role="dialog">
+<div class="diary-media-card">
+<button aria-label="Cerrar recuerdo" class="diary-media-close" onclick="closeDiaryMedia()" type="button">✕</button>
+<h3 id="diary-media-title">Un recuerdo para ti 🩵</h3>
+<div id="diary-media-content"></div>
+<p id="diary-media-note"></p>
+</div>
+</div>
+<p class="diary-playing" id="diary-status">Nuestra canción empieza al abrir el diario.</p>
+<audio controls="" id="diary-audio" preload="none" src="assets/media_018.mp3"></audio>
+<div class="diary-return-audios"><button aria-label="Volver a elegir entre los otros audios y secciones" onclick="openTrack(0)" type="button">♡ Volver a los otros audios / secciones ♡</button></div>
+</div>
+<div class="nav"><button class="ghost-btn" onclick="openTrack(0)">Elegir otro audio</button></div>
+</div>
+</section>
+</div>
+</section>
+<section aria-label="Sección 04: casa Gacha de Valeria" class="screen" hidden="" id="house-experience">
+<p class="eyebrow">AUDIO 04 · UN LUGAR PARA NOSOTROS 🩵</p>
+<h2 class="house-heading">Bienvenido a nuestra casita, amorcito</h2>
+<p class="house-subtitle">Valeria te espera dentro. Elige una de las tres puertas para descubrir lo que guardamos detrás de ella. ✨</p>
+<div class="house-scene">
+<img alt="Interior de una casa estilo Gacha Life, con Valeria de cabello amarillo y tres puertas de colores con corazones" src="assets/media_019.png">
+<button aria-label="Abrir la puerta rosa, sorpresa 1" class="house-door-hit door-one" onclick="openHouseDoor(1)" type="button"><span class="house-door-label">Puerta 1 💗</span></button>
+<button aria-label="Abrir la puerta morada, sorpresa 2" class="house-door-hit door-two" onclick="openHouseDoor(2)" type="button"><span class="house-door-label">Puerta 2 💜</span></button>
+<button aria-label="Abrir la puerta azul, sorpresa 3" class="house-door-hit door-three" onclick="openHouseDoor(3)" type="button"><span class="house-door-label">Puerta 3 🩵</span></button>
+</img></div>
+<audio class="house-audio" controls="" id="house-audio" preload="auto" src="assets/media_020.mp3"></audio>
+<p aria-live="polite" class="house-audio-note" id="house-audio-status">La canción empieza al entrar a esta sección. Si tu dispositivo bloquea la reproducción, pulsa reproducir aquí. 🎵</p>
+<div class="house-controls"><button onclick="openTrack(0)" type="button">← Volver a los audios / secciones</button></div>
+</section>
+<div aria-label="Transición hacia el acuario" aria-live="polite" hidden="" id="aquarium-transition">
+<div aria-hidden="true" class="aquarium-transition-bubbles"></div>
+<div class="aquarium-transition-content">
+<span aria-hidden="true" class="aquarium-transition-whale">🐋</span>
+<div class="aquarium-transition-title">La puerta 1 se abre… 🩵</div>
+<p class="aquarium-transition-subtitle">Amorcito, tengo una sorpresa para ti. Vamos a ver tu ballena juntos…</p>
+</div>
+</div>
+<div aria-labelledby="house-door-title" aria-modal="true" class="house-modal" hidden="" id="house-door-modal" onclick="if(event.target===this)closeHouseDoor()" role="dialog">
+<div class="house-modal-card">
+<h3 id="house-door-title">Una sorpresa para ti 🩵</h3>
+<p id="house-door-message">Esta puerta guarda una sorpresa.</p>
+<p style="font-size:.9rem;color:#947c98">Cuando me digas qué quieres poner en este cuarto, lo añadimos aquí. ♡</p>
+<button onclick="closeHouseDoor()" type="button">Volver a la casita</button>
+</div>
+</div>
+<div aria-label="Ver cartita en detalle" aria-modal="true" class="letter-detail-viewer" hidden="" id="letter-detail-viewer" role="dialog">
+<div class="letter-detail-card">
+<button aria-label="Cerrar detalle" class="letter-detail-close" onclick="closeLetterDetail()" type="button">✕</button>
+<h4 id="letter-detail-title">Imagen 1 🩵</h4>
+<div class="letter-detail-layout">
+<img alt="Imagen ampliada" id="letter-detail-image"/>
+<div class="letter-envelope-wrap" id="letter-envelope-wrap">
+<button aria-label="Abrir la cartita interactiva" class="letter-envelope-button" onclick="openSpecialLetter()" type="button">
+<span aria-hidden="true" class="letter-envelope-icon">💌</span>
+<span class="letter-envelope-label">Abrir cartita</span>
+</button>
+<span style="font: .72rem Arial,sans-serif;color:#87506a">Solo para ti 🩵</span>
+</div>
+<div aria-live="polite" class="letter-inline-message" id="letter-inline-message"></div>
+</div>
+<div class="letter-detail-nav">
+<button onclick="changeLetterDetail(-1)" type="button">← Anterior</button>
+<span id="letter-detail-count">1 / 7</span>
+<button onclick="changeLetterDetail(1)" type="button">Siguiente →</button>
+</div>
+</div>
+</div>
+<div aria-label="Carta especial de la imagen 1" aria-modal="true" class="letter-message-viewer" hidden="" id="special-letter-viewer" role="dialog">
+<div class="letter-message-card">
+<button aria-label="Cerrar carta" class="letter-detail-close" onclick="closeSpecialLetter()" type="button">✕</button>
+<img alt="Carta especial para la Imagen 1: My Girlfriend, dedicatoria romántica y dibujos de parejas" id="special-letter-image" src="assets/media_021.jpg">
+<div class="special-letter-text" hidden="" id="special-letter-text"></div>
+</img></div>
+</div>
+
+<script>
+const screens=['cover','tracks','player','house-experience'];
+let surpriseTimer=null, surpriseShown=false;
+const audio=document.getElementById('audio');
+const diaryAudio=document.getElementById('diary-audio');
+const vinyl=document.getElementById('vinyl');
+const memories=[...document.querySelectorAll('.memory')];
+let selectedTrack=0, lastObjectUrl=null;
+function showScreen(id){
+ if(id!=='player'){clearTimeout(surpriseTimer);stopFlowerGame();if(diaryAudio)diaryAudio.pause();const ha=document.getElementById('house-audio');if(ha)ha.pause();}
+ screens.forEach(s=>document.getElementById(s).classList.toggle('active',s===id));
+ window.scrollTo({top:0,behavior:'smooth'});
+ // Primer clic del usuario: intenta iniciar la canción sin exigir que busque el MP3.
+ if(id==='tracks' && audio.paused && audio.currentTime===0){
+   audio.play().then(()=>{document.getElementById('play-state').textContent='La canción está sonando 💗';})
+   .catch(()=>{document.getElementById('play-state').textContent='Pulsa reproducir para escuchar la canción 💗';});
+ }
+}
+function openTrack(n){
+ surpriseShown=false;clearTimeout(surpriseTimer);document.getElementById('surprise-scene').classList.remove('visible');document.getElementById('memories').classList.remove('blurred');
+ selectedTrack=n;
+ const player=document.getElementById('player'); if(player){player.classList.toggle('paparazzi-mode',n===1);player.classList.toggle('diary-mode',n===2);player.classList.toggle('house-mode',false);}
+ const houseAudio=document.getElementById('house-audio');
+ if(n===3){audio.pause();if(diaryAudio)diaryAudio.pause();const pa=document.getElementById('paparazzi-audio');if(pa)pa.pause();} else {if(houseAudio)houseAudio.pause();if(n===1){audio.pause();if(diaryAudio)diaryAudio.pause();} else {const pa=document.getElementById('paparazzi-audio');if(pa)pa.pause();if(n===2){audio.pause();if(diaryAudio){diaryAudio.pause();diaryAudio.currentTime=0;}resetDiaryForEntry();}}}
+ const house=document.getElementById('house-experience');if(house)house.hidden=(n!==3);
+ const pap=document.getElementById('paparazzi-experience'); if(pap) pap.hidden=(n!==1);
+ const diary=document.getElementById('diary-experience');if(diary)diary.hidden=(n!==2);
+ showScreen(n===3?'house-experience':'player');
+ const names=[
+  ['audio 01 · virtual love','Una canción para ti 💗','Pon la canción y deja que florezcan las palabras.'],
+  ['audio 02 · paparazzi 💘','Lady Gaga — Paparazzi ♡','Escucha Paparazzi y comparte una merienda conmigo.'],
+  ['audio 03 · reservado','Una sorpresa más 🌷','Aquí podremos crear una secuencia diferente de recuerdos.'],
+  ['audio 04 · la casa de Valeria 🏡','La casita de Valeria 💙','Entra a la casa Gacha, elige una puerta y descubre tres sorpresas.']
+ ];
+ document.getElementById('track-kicker').textContent=names[n][0];
+ document.getElementById('track-title').textContent=names[n][1];
+ document.getElementById('track-desc').textContent=names[n][2];
+ if(n<2) resetMemories();
+ if(n===1) { document.getElementById('play-state').textContent='Dale play a Paparazzi para comenzar 💗'; resetPaparazzi(); } else if(n===2) document.getElementById('play-state').textContent='Abre el diario para comenzar su canción ♡'; else if(n===3){document.getElementById('house-audio-status').textContent='Intentando reproducir «Ojitos Lindos» 🎵';const ha=document.getElementById('house-audio');if(ha){ha.currentTime=0;ha.play().then(()=>{document.getElementById('house-audio-status').textContent='La canción está sonando: Ojitos Lindos 🩵';}).catch(()=>{document.getElementById('house-audio-status').textContent='Tu dispositivo bloqueó el inicio automático. Pulsa reproducir para escucharla 🩵';});}}
+}
+let aquariumTransitionTimer=null;
+function openHouseDoor(number){
+ if(number===1){
+  const transition=document.getElementById('aquarium-transition');
+  if(aquariumTransitionTimer)window.clearTimeout(aquariumTransitionTimer);
+  if(transition){transition.hidden=false;transition.classList.remove('active');void transition.offsetWidth;transition.classList.add('active');}
+  aquariumTransitionTimer=window.setTimeout(()=>{
+   if(transition){transition.classList.remove('active');transition.hidden=true;}
+   renderHouseDoor(1);
+  },1150);
+  return;
+ }
+ renderHouseDoor(number);
+}
+function renderHouseDoor(number){
+ const titles={1:'Puerta rosa · El acuario de Valeria 🐋🩵',2:'Puerta morada · Sorpresa 2 💜',3:'Puerta azul · Sorpresa 3 🩵'};
+ const card=document.querySelector('#house-door-modal .house-modal-card');
+ if(!card) return;
+ // Cada render vuelve a crear referencias válidas: las puertas 1 y 2 reemplazan el HTML
+ // de la tarjeta y por eso los elementos del render anterior pueden haber desaparecido.
+ let title=card.querySelector('#house-door-title');
+ if(!title){title=document.createElement('h3');title.id='house-door-title';card.prepend(title);}
+ let message=card.querySelector('#house-door-message');
+ if(!message){message=document.createElement('p');message.id='house-door-message';card.appendChild(message);}
+ title.textContent=titles[number]||'Una sorpresa para ti 🩵';
+ if(number===1){
+  card.classList.add('whale-room');
+  message.hidden=true;
+  card.innerHTML=`<h3 id="house-door-title">🐋 El acuario de Valeria 🩵</h3>
+   <p class="ronald-line">💙 Ronald dice: “Mira amorcito Shi te conseguí tu Ballena jsjsjs MUACK 🩵”</p>
+   <div class="whale-tank has-scene-image"><img class="whale-scene-image" src="assets/media_022.png" alt="Escena estilo Gacha de Ronald y Valeria frente al acuario gigante con la ballena y su diálogo romántico" />
+    <button type="button" class="aquarium-letter-button" onclick="toggleAquariumLetter()" aria-label="Abrir la cartita sorpresa">✉️💌</button>
+   </div>
+   <div id="aquarium-letter-note" class="aquarium-letter-note" hidden>
+    <div class="aquarium-envelope-open">💌</div>
+    <p>Una cartita especial para ti 🩵</p>
+    <img class="aquarium-letter-image" src="assets/media_023.jpg" alt="Mensaje romántico para Valeria sobre la ballena y el acuario" />
+    <button type="button" class="whale-action" onclick="toggleAquariumLetter()">Cerrar cartita ✉️</button>
+   </div>
+   <div class="whale-couple" aria-label="Ronald y Valeria están juntos frente al acuario">
+    <div class="whale-person"><span class="whale-avatar" aria-hidden="true">🧑🏾‍🦱</span><span>Ronald 💚</span></div><span class="whale-heart" aria-hidden="true">💙</span>
+    <div class="whale-person"><span class="whale-avatar" aria-hidden="true">👱🏻‍♀️</span><span>Valeria 💛</span></div>
+   </div>
+   <button type="button" class="whale-action" onclick="showWhaleTogetherScene()">Mirar el acuario agarraditos de la mano 🩵</button>
+   <div id="whale-together-scene" class="together-scene" hidden>
+    
+    <p class="scene-caption">Y así se quedan juntitos, agarrados de la mano, mirando su ballena nadar en el acuario. 🩵🐋 MUACK.</p>
+   </div>
+   <button type="button" class="whale-action" onclick="closeHouseDoor()">← Volver a casa 🏡</button>`;
+ }else if(number===2){
+  card.classList.remove('whale-room');
+  message.hidden=true;
+  card.innerHTML=`<h3 id="house-door-title">🏰 Nuestra cita de cuento 💗</h3>
+   <p class="disney-dialogue">💙 Ronald dice: “Mira tu Disneyland jeje”</p>
+   <div class="disneyland-scene">
+    <img src="assets/media_024.png" alt="Ronald y Valeria mirándose frente a frente con el castillo de cuento de fondo" />
+    <div class="disney-letter-corner"><button class="disney-letter-btn" type="button" onclick="toggleDisneyLetter()" aria-expanded="false" aria-controls="disney-letter-panel" aria-label="Abrir la cartita interactiva">💌</button></div>
+   </div>
+   <div id="disney-letter-panel" class="disney-letter-panel" hidden>
+    <strong>Una cartita para ti, Valeria 🩵</strong>
+    <p>Amorcito, aquí está tu cartita de Disneyland jeje. Te mereces todo el multiverso. MUACK 🩵</p>
+    <img id="disney-letter-preview" class="disney-letter-preview" src="assets/media_025.jpg" alt="Carta de Disneyland para Valeria" />
+    <button type="button" onclick="toggleDisneyLetter()">Cerrar cartita ✉️</button>
+   </div>
+   <p style="color:#8a7191">Un momentito mágico frente al castillo, juntitos. ✨</p>
+   <button type="button" onclick="closeHouseDoor()">← Volver a casa 🏡</button>`;
+ }else{
+  card.classList.remove('whale-room');
+  message.hidden=false;
+  card.innerHTML=`<h3 id="house-door-title">🩵 Un rinconcito solo para nosotros</h3>
+   <div class="third-door-surprise" style="text-align:center;padding:1rem;border-radius:18px;background:linear-gradient(145deg,#e8f6ff,#f8eaff);color:#715a83">
+    <div style="font-size:3rem;line-height:1.4">🎁 🩵 🧸</div>
+    <p style="font-size:1.08rem;font-weight:800">¡Encontraste nuestra tercera sorpresa, amorcito!</p>
+    <p>Este cuartito queda guardado para otro recuerdo bonito de los dos. Por ahora te dejo un abrazo gigante, un besito y muchos MUACK. 🫂💋</p>
+    <p style="font-size:1.5rem">💙 💗 💜</p>
+   </div>
+   <button type="button" onclick="closeHouseDoor()">← Volver a casa 🏡</button>`;
+ }
+ document.getElementById('house-door-modal').hidden=false;
+}
+
+function toggleDisneyLetter(){
+ const panel=document.getElementById('disney-letter-panel');
+ const button=document.querySelector('#house-door-modal .disney-letter-btn');
+ if(!panel)return;
+ panel.hidden=!panel.hidden;
+ if(button)button.setAttribute('aria-expanded',String(!panel.hidden));
+ if(!panel.hidden)window.setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+}
+function previewDisneyLetter(event){
+ const file=event.target.files&&event.target.files[0];
+ const preview=document.getElementById('disney-letter-preview');
+ if(!file||!preview)return;
+ if(!file.type.startsWith('image/'))return;
+ const reader=new FileReader();
+ reader.onload=()=>{preview.src=reader.result;preview.hidden=false;};
+ reader.readAsDataURL(file);
+}
+function toggleAquariumLetter(){const note=document.getElementById('aquarium-letter-note');if(note)note.hidden=!note.hidden;}
+function showWhaleTogetherScene(){const scene=document.getElementById('whale-together-scene');if(scene)scene.hidden=false;}
+function closeHouseDoor(){
+ const modal=document.getElementById('house-door-modal');
+ if(modal) modal.hidden=true;
+ const transition=document.getElementById('aquarium-transition');
+ if(transition){transition.hidden=true;transition.classList.remove('active');}
+ if(aquariumTransitionTimer){window.clearTimeout(aquariumTransitionTimer);aquariumTransitionTimer=null;}
+ // Regresa visualmente a la casa para poder elegir cualquiera de las tres puertas.
+ const house=document.getElementById('house-experience');
+ const scene=house && house.querySelector('.house-scene');
+ if(scene) window.setTimeout(()=>scene.scrollIntoView({behavior:'smooth',block:'center'}),80);
+}
+const houseAudioElement=document.getElementById('house-audio');
+if(houseAudioElement){houseAudioElement.addEventListener('play',()=>{audio.pause();if(diaryAudio)diaryAudio.pause();const pa=document.getElementById('paparazzi-audio');if(pa)pa.pause();document.getElementById('house-audio-status').textContent='La canción está sonando: Ojitos Lindos 🩵';});houseAudioElement.addEventListener('ended',()=>{document.getElementById('house-audio-status').textContent='La canción terminó, pero puedes seguir explorando la casita ♡';});}
+
+function resetDiaryForEntry(){
+ const inside=document.getElementById('diary-inside');
+ const wrap=document.querySelector('#diary-experience .diary-wrap');
+ const cover=document.getElementById('diary-cover');
+ if(inside) inside.hidden=true;
+ if(wrap) wrap.classList.remove('is-open');
+ if(cover){cover.hidden=false;cover.setAttribute('aria-expanded','false');const label=cover.querySelector('.diary-cover-label');if(label)label.textContent='Abrir nuestro diario ✨';}
+ if(diaryAudio){diaryAudio.pause();diaryAudio.currentTime=0;}
+ const status=document.getElementById('diary-status');if(status)status.textContent='Nuestra canción empieza al abrir el diario.';
+}
+function openDiary(){
+ const inside=document.getElementById('diary-inside');
+ const wrap=document.querySelector('#diary-experience .diary-wrap');
+ const cover=document.getElementById('diary-cover');
+ if(!inside || !wrap || !cover)return;
+ if(inside.hidden){
+   inside.hidden=false;
+   wrap.classList.add('is-open');
+   cover.setAttribute('aria-expanded','true');
+   cover.querySelector('.diary-cover-label').textContent='Abriendo nuestro diario… ♡';
+   window.setTimeout(()=>{cover.hidden=true;},720);
+   if(diaryAudio){diaryAudio.currentTime=0;}
+   diaryAudio.play().then(()=>{document.getElementById('diary-status').textContent='Nuestra canción está sonando ♡';})
+   .catch(()=>{document.getElementById('diary-status').textContent='El diario está abierto; toca reproducir para escuchar la canción ♡';});
+ }
+}
+diaryAudio.addEventListener('play',()=>{audio.pause();const pa=document.getElementById('paparazzi-audio');if(pa)pa.pause();document.getElementById('diary-status').textContent='Nuestra canción está sonando ♡';});
+diaryAudio.addEventListener('ended',()=>{document.getElementById('diary-status').textContent='Fin de la canción; el diario sigue aquí para ti ♡';});
+// La canción ya está incorporada en el HTML. No se necesita seleccionar un archivo.
+
+audio.addEventListener('play',()=>{vinyl.classList.add('spin');document.getElementById('play-state').textContent='La canción está sonando 💗';});
+audio.addEventListener('pause',()=>{vinyl.classList.remove('spin');if(!audio.ended)document.getElementById('play-state').textContent='El disco está en pausa';});
+audio.addEventListener('ended',()=>{vinyl.classList.remove('spin');document.getElementById('play-state').textContent='La canción terminó, pero el recuerdo queda ♡'; if(selectedTrack===0){let msg=document.getElementById('flower-kisses-message'); if(!msg){msg=document.createElement('p');msg.id='flower-kisses-message';msg.className='flower-kisses-message';msg.textContent='Las flores que recojas son los beshitos que te voy a dar amorcito 🩵';document.getElementById('player').appendChild(msg);}msg.hidden=false;}});
+
+let flowersCaught=0, flowerSpawnTimer=null, flowerGameStarted=false;
+const flowerRain=document.getElementById('flower-rain');
+const flowerGame=document.getElementById('flower-game');
+const flowerEmojis=['🌸','🌼','🌷','💮','🌺'];
+function spawnFallingFlower(){
+ if(!flowerRain || !flowerGameStarted)return;
+ const f=document.createElement('button');
+ f.type='button';f.className='falling-flower';
+ f.textContent=flowerEmojis[Math.floor(Math.random()*flowerEmojis.length)];
+ f.setAttribute('aria-label','Recolectar florecita');
+ f.style.left=(4+Math.random()*88)+'%';
+ f.style.setProperty('--fall-time','2.8s');
+ f.addEventListener('click',()=>{
+  if(f.classList.contains('caught'))return;
+  flowersCaught++;
+  document.getElementById('flower-score').textContent='Flores recolectadas: '+flowersCaught+' 🌷';
+  f.classList.add('caught');
+  setTimeout(()=>f.remove(),300);
+ });
+ flowerRain.appendChild(f);
+ setTimeout(()=>f.remove(),5000);
+}
+function startFlowerGame(){
+ stopFlowerGame();
+ flowersCaught=0;flowerGameStarted=true;flowerGame.classList.remove('done');
+ document.getElementById('flower-score').textContent='Flores recolectadas: 0 🌷';
+ flowerRain.innerHTML='';
+ spawnFallingFlower();
+ flowerSpawnTimer=setInterval(spawnFallingFlower,1800);
+}
+function stopFlowerGame(){
+ flowerGameStarted=false;
+ clearInterval(flowerSpawnTimer);
+ flowerRain.innerHTML='';
+}
+
+
+function openValeriaEnvelope(){
+ const button=document.getElementById('valeria-envelope-button');
+ const reveal=document.getElementById('final-image-reveal');
+ if(!button||!reveal)return;
+ const isOpen=button.classList.toggle('opened');
+ button.setAttribute('aria-expanded',String(isOpen));
+ reveal.classList.toggle('visible',isOpen);
+ const instruction=button.querySelector('.envelope-instruction');
+ if(instruction)instruction.textContent=isOpen?'¡Sorpresa para ti, Valeria! ♡':'Pulsa aquí para que se abra ♡';
+}
+
+audio.addEventListener('timeupdate',()=>{
+ if(!audio.duration)return;
+ // Reveal the four flower messages progressively through the first track.
+ const fraction=audio.currentTime/audio.duration;
+ memories.forEach((m,i)=>{if(fraction >= (i+1)*0.12)m.classList.add('show');});
+ if(fraction>=0.48 && !surpriseShown){
+  surpriseShown=true;
+  surpriseTimer=setTimeout(()=>{document.getElementById('memories').classList.add('blurred');setTimeout(()=>document.getElementById('surprise-scene').classList.add('visible'),1200);},2200);
+ }
+});
+function resetMemories(){
+ const envelopeButton=document.getElementById('valeria-envelope-button');
+ const imageReveal=document.getElementById('final-image-reveal');
+ if(envelopeButton){envelopeButton.classList.remove('opened');envelopeButton.setAttribute('aria-expanded','false');const instruction=envelopeButton.querySelector('.envelope-instruction');if(instruction)instruction.textContent='Pulsa aquí para que se abra ♡';}
+ if(imageReveal)imageReveal.classList.remove('visible');
+ stopFlowerGame();startFlowerGame();clearTimeout(surpriseTimer);surpriseShown=false;document.getElementById('surprise-scene').classList.remove('visible');document.getElementById('memories').classList.remove('blurred');memories.forEach(m=>m.classList.remove('show'));if(audio.currentTime>0){audio.currentTime=0;}document.getElementById('play-state').textContent='El disco espera que le des play';}
+
+
+const papBoyImage="assets/media_008.jpg";
+const papLetterAImage="assets/media_026.jpg";
+const papLetterBImage="assets/media_009.jpg";
+
+let papProgress=0, papFirstChoice=null, papRoute=null, papRouteFinished=false, papRingDone=false, papLetterAOpened=false, papCarryChoice=null;
+const papAudio=document.getElementById('paparazzi-audio');
+function resetPaparazzi(){
+ papProgress=0;papFirstChoice=null;papRoute=null;papRouteFinished=false;papRingDone=false;papLetterAOpened=false;papCarryChoice=null;
+ document.getElementById('pap-part-one').hidden=false;document.getElementById('pap-part-two').hidden=true;
+ document.getElementById('pap-first-scene').hidden=true;document.getElementById('pap-first-scene').innerHTML='';
+ document.getElementById('paparazzi-dog').hidden=true;document.getElementById('paparazzi-letter').hidden=true;
+ document.getElementById('paparazzi-envelope').disabled=true;document.getElementById('paparazzi-fill').style.width='0%';
+ document.getElementById('paparazzi-percent').textContent='0%';document.getElementById('paparazzi-choice-display').hidden=true;
+ document.getElementById('paparazzi-choice-display').innerHTML='';document.getElementById('paparazzi-dialogue').textContent='Primero elige nuestro plan, mi reina ♡';
+ document.getElementById('paparazzi-status').textContent='Parte 1 de 2 · Elige el plan inicial · Medidor: 0%';
+ document.querySelectorAll('#pap-first-options button').forEach(b=>{b.disabled=false;b.classList.remove('chosen');});
+ document.querySelectorAll('#pap-route-options button').forEach(b=>{b.disabled=false;b.classList.remove('chosen');});
+ if(papAudio){papAudio.removeEventListener('timeupdate',papUpdateMeter);papAudio.removeEventListener('ended',papUpdateMeter);papAudio.addEventListener('timeupdate',papUpdateMeter);papAudio.addEventListener('ended',papUpdateMeter);}
+}
+function papUpdateMeter(){
+ if(!papAudio||!Number.isFinite(papAudio.duration)||papAudio.duration<=0)return;
+ papProgress=Math.min(100,Math.floor(papAudio.currentTime/papAudio.duration*100));
+ document.getElementById('paparazzi-fill').style.width=papProgress+'%';document.getElementById('paparazzi-percent').textContent=papProgress+'%';papCheckUnlock();
+}
+function papChooseFirst(kind){
+ if(papFirstChoice!==null)return;papFirstChoice=kind;
+ document.querySelectorAll('#pap-first-options button').forEach((b,i)=>{b.disabled=true;if((kind==='helado'&&i===0)||(kind==='pelis'&&i===1)||(kind==='cocinar'&&i===2))b.classList.add('chosen');});
+ const scene=document.getElementById('pap-first-scene');scene.hidden=false;
+ const plans={
+ helado:{title:'🍨 Heladito para dos',render:()=>`<div class="pap-scene pap-icecream-scene"><img class="pap-route-art" src="assets/media_027.jpg" alt="Ilustración de helado de chocolate y vainilla en un cono"><p class="pap-route-caption">Mira se parece a nosotros yo neg- y tú toda blanquita ashi bien linda jsjs MUACK 🩵</p></div>`},
+ pelis:{title:'🎬 Pelis y series juntitos',render:()=>`<div class="pap-scene pap-series-scene"><img class="pap-route-art" src="assets/media_028.png" alt="Ilustración romántica de una pareja chibi viendo películas y series juntos, con sus animes favoritos"><p>Te recuerdo que tienes increíbles gustos 💗</p><p>me encanta escucharte hablar de las cosas que te gustan jsjs que digo siempre me encanta escucharte/ leerte 🩵</p></div>`},
+ cocinar:{title:'🏡 Cocinando juntitos en casa',render:()=>`<div class="pap-scene pap-cooking-scene"><div class="pap-cooking-gallery"><img class="pap-route-art" src="assets/media_029.jpg" alt="Espaguetis preparados para compartir"><img class="pap-route-art" src="assets/media_030.jpg" alt="Pixel art de pitahaya"><img class="pap-route-art" src="assets/media_031.jpg" alt="Pixel art de manzana verde"><img class="pap-route-art" src="assets/media_032.jpg" alt="Platito de comida para compartir"></div><p>Tratemos de no quemar la casa amorcito jsjsj 🫪</p><p>Disfrutemos de rikas comiditas juntitos</p></div>`}
+ };
+ const s=plans[kind];scene.innerHTML=`<h4>${s.title}</h4>${s.render()}`;
+ document.getElementById('pap-part-two').hidden=false;
+ document.getElementById('paparazzi-status').textContent='Parte 1 completada: '+s.title+' · Parte 2 de 2: elige qué hacer ahora · Medidor: '+papProgress+'%';
+ document.getElementById('paparazzi-dialogue').textContent='Nuestro primer plan fue precioso. ¿Qué quieres hacer ahora, mi reina? ♡';papCheckUnlock();
+}
+function papChooseRoute(route){
+ if(papFirstChoice===null||papRoute!==null)return;papRoute=route;
+ document.querySelectorAll('#pap-route-options button').forEach((b,i)=>{b.disabled=true;if(i===route-1)b.classList.add('chosen');});
+ const display=document.getElementById('paparazzi-choice-display');display.hidden=false;
+ if(route===1){
+ document.getElementById('paparazzi-dialogue').textContent='«Pero nosotros no tenemos Netflix, amorcito…» *se pone rojito de la vergüenza* 💗';
+ display.innerHTML=`<div class="pap-scene"><img class="pap-scene-boy" src="assets/media_008.jpg" alt="El chico chibi sonrojado"><p><strong>Él:</strong> «Pero nosotros no tenemos Netflix, amorcito…» <span>*se pone rojito de la vergüenza*</span></p><p>Se toman de la mano y caminan juntitos hacia casa, felices y sin dejar de sonreír. 🏡💕</p><div style="font-size:2.5rem;background:#fff;border-radius:14px;padding:18px">🧑🏽‍🤝‍🧑🏻 💗 🏡</div><p class="pap-complete-note">Ruta 1 elegida. ¡Qué bonito volver a casa juntos!</p></div>`;papRouteFinished=true;
+ }else if(route===2){
+ document.getElementById('paparazzi-dialogue').textContent='«Shi, amorcito 🥹💕 ¿cómo quieres que te cargue?»';
+ display.innerHTML=`<div class="pap-scene"><img class="pap-scene-boy" src="assets/media_008.jpg" alt="El chico chibi"><p>«Ven aquí, amorcito. Te llevo hasta casa como tú quieras» 💗</p><p>¿Cómo quieres que te cargue?</p><div class="pap-subchoices"><button type="button" onclick="papChooseCarry('brazos')">a) En brazos 💗</button><button type="button" onclick="papChooseCarry('hombros')">b) En hombros 🥹</button><button type="button" onclick="papChooseCarry('espalda')">c) En la espalda 💕</button></div><div id="pap-carry-scene"></div></div>`;
+ }else{
+ document.getElementById('paparazzi-dialogue').textContent='«¿Shi? Entonces prepárate para una sorpresa, OMEGUITA…» *se sonroja muchísimo* 💍';
+ display.innerHTML=`<div class="pap-scene pap-proposal"><div class="pap-kneel" aria-hidden="true">🧎🏻‍♂️💗</div><img class="pap-scene-boy" src="assets/media_008.jpg" alt="El chico está muy sonrojado"><p>El chico se arrodilla, nervioso y feliz, con una cajita de anillo en una mano y una carta en la otra.</p><p><strong>«Amorcito, tengo algo muy importante que preguntarte…»</strong></p><div><button class="pap-interactive" type="button" onclick="papOpenLetterA()">💌 Leer la carta (A)</button><button class="pap-ring" type="button" aria-label="Pulsar el anillo" onclick="papPutOnRing()">💍</button><p>La carta y el anillo se pueden pulsar en cualquier orden.</p></div><div id="pap-letter-a" hidden><h3>Carta (A) · Cásate conmigo</h3><img class="pap-letter-image" src="assets/media_026.jpg" alt="Carta del matrimonio"></div><div id="pap-ring-result" hidden></div></div>`;
+ }
+ document.getElementById('paparazzi-status').textContent='Parte 2 de 2 · Ruta '+route+' elegida · Elección bloqueada durante esta cita · Medidor: '+papProgress+'%';papCheckUnlock();
+}
+function papChooseCarry(kind){
+ if(papCarryChoice!==null)return;papCarryChoice=kind;document.querySelectorAll('#paparazzi-choice-display .pap-subchoices button').forEach(b=>b.disabled=true);
+ const target=document.getElementById('pap-carry-scene');const scenes={
+ hombros:{title:'¡En hombros, bien agarradita! 🥹',pose:'🧑🏽‍🦱 💗 🧍🏻‍♀️',text:'Él te acomoda con cuidado sobre sus hombros y sostiene tus manos para que estés segura. Tú te ríes desde arriba y él camina orgulloso llevándote a casa. 💗'},
+ espalda:{title:'¡En su espalda, abrazadita! 💕',pose:'🧑🏽‍🦱 🫶🏻 🧍🏻‍♀️',text:'Te subes a su espalda y lo abrazas por los hombros. Él te sujeta con ternura mientras caminan juntitos, riéndose durante todo el camino a casa. 🥹💕'},
+ brazos:{title:'¡En brazos como una princesita! 💍💗',pose:'🧑🏽‍🦱 🫂 🧍🏻‍♀️',text:'Él te levanta con cuidado entre sus brazos, te mira todo sonrojado y te lleva a casa como si fueras su tesoro más preciado. 💗'}
+ };const s=scenes[kind];target.innerHTML=`<div class="pap-scene pap-carry-${kind}"><h4>${s.title}</h4><div class="pap-carry-illustration" role="img" aria-label="${s.title}">${s.pose}</div><p>${s.text}</p><p class="pap-complete-note">Van de camino a casa, tomaditos y felices. Ruta 2 completada. 💗</p></div>`;
+ papRouteFinished=true;document.getElementById('paparazzi-dialogue').textContent=s.title+' «No te suelto, mi reina».';papCheckUnlock();
+}
+function papOpenLetterA(){
+ const card=document.getElementById('pap-letter-a');if(!card)return;card.hidden=false;papLetterAOpened=true;
+ const btn=document.querySelector('#paparazzi-choice-display button[onclick="papOpenLetterA()"]');if(btn)btn.textContent='💌 Carta (A) abierta ♡';papMaybeFinishProposal();
+}
+function papPutOnRing(){
+ if(papRingDone)return;papRingDone=true;const result=document.getElementById('pap-ring-result');result.hidden=false;
+ result.innerHTML='<p class="pap-complete-note">💍 Él te toma suavemente la mano y te pone el anillo. Te mira con los ojos brillantes y ambos se abrazan, felices.</p><div style="font-size:2.6rem">💍 🫶🏻 💗 🏡</div><p>Se van a casa de la mano, emocionados por todo lo que vivirán juntos.</p>';
+ const btn=document.querySelector('#paparazzi-choice-display .pap-ring');if(btn)btn.textContent='💍 Anillo puesto';papMaybeFinishProposal();
+}
+function papMaybeFinishProposal(){
+ if(papRingDone&&papLetterAOpened){papRouteFinished=true;document.getElementById('paparazzi-dialogue').textContent='«¡Te amo, mi futura esposa!» 💗 La cita terminó de una manera inolvidable.';papCheckUnlock();}
+}
+function papCheckUnlock(){
+ const done=papFirstChoice!==null&&papRoute!==null&&papRouteFinished&&papProgress>=100;
+ document.getElementById('paparazzi-dog').hidden=!done;document.getElementById('paparazzi-envelope').disabled=!done;
+ if(done)document.getElementById('paparazzi-status').textContent='¡Las dos partes de la cita están completas y el medidor llegó al 100 %! Ya puedes abrir la carta (B) 💙';
+}
+function papOpenLetter(){
+ if(document.getElementById('paparazzi-envelope').disabled)return;document.getElementById('paparazzi-letter').hidden=false;document.getElementById('paparazzi-envelope').textContent='Carta (B) abierta ♡';
+}
+
+
+// Los dos videitos están incorporados en el HTML para que el diario funcione sin archivos externos.
+const diaryVideoSources = [
+  "assets/media_033.mp4",
+  "assets/media_034.mp4"
+];
+let diaryCurrentPage = 1;
+const letterDetailImages = [
+  {src:'assets/media_011.jpg', alt:'Cartita o recuerdo 1'},
+  {src:'assets/media_012.jpg', alt:'Cartita o recuerdo 2'},
+  {src:'assets/media_013.jpg', alt:'Cartita o recuerdo 3'},
+  {src:'assets/media_014.webp', alt:'Cartita o recuerdo 4'},
+  {src:'assets/media_015.webp', alt:'Cartita o recuerdo 5'},
+  {src:'assets/media_016.webp', alt:'Cartita o recuerdo 6'},
+  {src:'assets/media_017.webp', alt:'Cartita o recuerdo 7'}
+ ];
+let currentLetterDetail = 1;
+function openLetterDetail(index){currentLetterDetail=index;renderLetterDetail();document.getElementById('letter-detail-viewer').hidden=false;document.body.style.overflow='hidden';}
+function renderLetterDetail(){const item=letterDetailImages[currentLetterDetail-1];const detailViewer=document.getElementById('letter-detail-viewer');detailViewer.classList.toggle('image-six-blurred',currentLetterDetail===6);document.getElementById('letter-detail-title').textContent='Imagen '+currentLetterDetail+' 🩵';const img=document.getElementById('letter-detail-image');img.src=item.src;img.alt=item.alt;document.getElementById('letter-detail-count').textContent=currentLetterDetail+' / '+letterDetailImages.length;const envelope=document.getElementById('letter-envelope-wrap');const inline=document.getElementById('letter-inline-message');envelope.classList.toggle('visible',currentLetterDetail===1||currentLetterDetail===4||currentLetterDetail===6);inline.classList.toggle('visible',currentLetterDetail===2||currentLetterDetail===3||currentLetterDetail===7);inline.innerHTML=currentLetterDetail===2?'<span class="message-heart">💗💌</span>Gracias por estar para mí siempre y enserio GRACIAS lo que hiciste ese día fue muy hermoso gracias MUACK 🩵':currentLetterDetail===3?'<span class="message-heart">😽🩵</span>MUACK 🩵 BESHITOS EN EL POTO':currentLetterDetail===7?'<span class="message-heart">💌🩵</span>De aquí fome la idea para darte los buenos días en diferentes idiomas jsjs MUACK 🩵':'';}
+function changeLetterDetail(direction){currentLetterDetail=((currentLetterDetail-1+direction+letterDetailImages.length)%letterDetailImages.length)+1;renderLetterDetail();}
+function closeLetterDetail(){document.getElementById('letter-detail-viewer').hidden=true;document.body.style.overflow='';}
+const specialLetterOriginalImage=document.getElementById('special-letter-image').getAttribute('src');
+function openSpecialLetter(){if(currentLetterDetail!==1&&currentLetterDetail!==4&&currentLetterDetail!==6)return;const viewer=document.getElementById('special-letter-viewer');const img=document.getElementById('special-letter-image');const msg=document.getElementById('special-letter-text');if(currentLetterDetail===6){img.src='assets/media_035.jpg';img.alt='Imagen adjunta para la cartita interactiva de la imagen 6';viewer.setAttribute('aria-label','Cartita interactiva de la imagen 6');}else if(currentLetterDetail===4){img.src='assets/media_036.jpg';img.alt='Imagen enviada para la cartita interactiva de la imagen 4';viewer.setAttribute('aria-label','Cartita interactiva de la imagen 4');}else{img.src=specialLetterOriginalImage;img.alt='Carta especial de la imagen 1';viewer.setAttribute('aria-label','Carta especial de la imagen 1');}img.hidden=false;msg.hidden=true;viewer.hidden=false;}function closeSpecialLetter(){document.getElementById('special-letter-viewer').hidden=true;}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSpecialLetter();closeLetterDetail();}if(!document.getElementById('letter-detail-viewer').hidden&&e.key==='ArrowRight')changeLetterDetail(1);if(!document.getElementById('letter-detail-viewer').hidden&&e.key==='ArrowLeft')changeLetterDetail(-1);});
+
+function turnDiaryPage(direction){
+  const next = Math.max(1, Math.min(5, diaryCurrentPage + direction));
+  if(next === diaryCurrentPage) return;
+  const current = document.getElementById('diary-spread-' + diaryCurrentPage);
+  const target = document.getElementById('diary-spread-' + next);
+  current.classList.remove('is-turning-forward','is-turning-back');
+  current.classList.add(direction > 0 ? 'is-turning-forward' : 'is-turning-back');
+  window.setTimeout(()=>{
+    current.hidden = true;
+    current.classList.remove('is-current','is-turning-forward','is-turning-back');
+    target.hidden = false;
+    target.classList.add('is-current');
+    target.style.animation = 'diaryPageReveal .42s ease both';
+    window.setTimeout(()=>{target.style.animation='';},450);
+    diaryCurrentPage = next;
+    document.getElementById('diary-prev-page').disabled = next === 1;
+    document.getElementById('diary-next-page').disabled = next === 5;
+    document.getElementById('diary-page-indicator').textContent = next + ' / 5';
+  }, 270);
+}
+const favoriteChatImages = {
+  1: 'assets/media_037.jpg',
+  2: 'assets/media_038.jpg',
+  3: 'assets/media_039.jpg',
+  4: 'assets/media_040.jpg',
+  5: 'assets/media_041.jpg'
+};
+function toggleFavoriteChat(index){
+  const panel = document.getElementById('favorite-chat-reveal');
+  const img = document.getElementById('favorite-chat-image');
+  const labels = ['Te amo 🩵','Hamburguesa triple','*los demandaban*','La conversación más normal con mi novio','¿Cuál es tu tercer color favorito?'];
+  document.getElementById('favorite-chat-title').textContent = labels[index-1] + ' ♡';
+  img.src = favoriteChatImages[index];
+  img.alt = 'Captura: ' + labels[index-1];
+  img.hidden = false;
+  panel.hidden = false;
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function closeFavoriteChat(){document.getElementById('favorite-chat-reveal').hidden=true;}
+function openDiaryVideo(index){
+  const viewer = document.getElementById('diary-media-viewer');
+  const content = document.getElementById('diary-media-content');
+  content.innerHTML = '';
+  const video = document.createElement('video');
+  video.controls = true;
+  video.playsInline = true;
+  video.preload = 'metadata';
+  video.src = diaryVideoSources[index];
+  video.setAttribute('aria-label', 'Videito ' + (index + 1));
+  content.appendChild(video);
+  document.getElementById('diary-media-title').textContent = index === 0 ? 'Videito 1 🩷' : 'Videito 2 🩵';
+  document.getElementById('diary-media-note').textContent = 'Un videito tuyo que me hace muy feliz jsjs MUACK 🩵';
+  viewer.hidden = false;
+  const playAttempt = video.play();
+  if(playAttempt && playAttempt.catch) playAttempt.catch(()=>{});
+}
+function openDiaryPhotos(){
+  const viewer = document.getElementById('diary-media-viewer');
+  const content = document.getElementById('diary-media-content');
+  content.innerHTML = '';
+  document.getElementById('diary-media-title').textContent = 'Tu también eres mi todo amorcito MUACK 🩵';
+  const strip = document.createElement('div');
+  strip.className = 'diary-photo-strip';
+  strip.setAttribute('aria-label','Galería de fotos deslizable');
+  const photos = [
+    {src:'assets/media_042.webp', alt:'Ramo de flores blancas para ti'},
+    {src:'assets/media_043.webp', alt:'Ilustración romántica con el mensaje eres todo para mí'}
+  ];
+  photos.forEach((photo,i)=>{
+    const slide = document.createElement('figure');
+    slide.className = 'diary-photo-slide';
+    const img = document.createElement('img');
+    img.src = photo.src; img.alt = photo.alt; img.loading = 'eager';
+    const caption = document.createElement('figcaption');
+    caption.className = 'diary-photo-count';
+    caption.textContent = (i+1) + ' / ' + photos.length;
+    slide.append(img,caption); strip.appendChild(slide);
+  });
+  content.appendChild(strip);
+  document.getElementById('diary-media-note').textContent = 'Tu también eres mi todo amorcito MUACK 🩵 — desliza hacia un lado para ver la siguiente fotito.';
+  viewer.hidden = false;
+}
+function openDiaryPhotoPlaceholder(index){
+  const viewer = document.getElementById('diary-media-viewer');
+  const content = document.getElementById('diary-media-content');
+  content.innerHTML = '';
+  document.getElementById('diary-media-title').textContent = 'Me importas demasiado, Valeria 🩵';
+  document.getElementById('diary-media-note').textContent = 'Me alegra saber que te importo me hace tan feliz por qué a mí también me importas demasiado Valeria GRACIAS POR TODO ENSERIO MUACK 🩵';
+  const strip = document.createElement('div');
+  strip.className = 'diary-photo-strip';
+  strip.setAttribute('aria-label','Fotos para deslizar de lado a lado, estilo TikTok');
+  const photos = [
+    {src:'assets/media_044.jpg',alt:'Recuerdo bonito 1'},
+    {src:'assets/media_045.jpg',alt:'Recuerdo bonito 2'},
+    {src:'assets/media_046.jpg',alt:'Recuerdo bonito 3'},
+    {src:'assets/media_047.jpg',alt:'Recuerdo bonito 4'},
+    {src:'assets/media_048.jpg',alt:'Recuerdo bonito 5'},
+    {src:'assets/media_049.jpg',alt:'Recuerdo bonito 6'},
+    {src:'assets/media_050.jpg',alt:'Recuerdo bonito 7'},
+    {src:'assets/media_051.jpg',alt:'Recuerdo bonito 8'},
+    {src:'assets/media_052.jpg',alt:'Recuerdo bonito 9'},
+    {src:'assets/media_053.jpg',alt:'Recuerdo bonito 10'}
+  ];
+  photos.forEach((photo, i) => {
+    const slide = document.createElement('figure');
+    slide.className = 'diary-photo-slide';
+    const img = document.createElement('img');
+    img.src = photo.src;
+    img.alt = photo.alt;
+    img.loading = i > 1 ? 'lazy' : 'eager';
+    slide.appendChild(img);
+    const count = document.createElement('figcaption');
+    count.className = 'diary-photo-count';
+    count.textContent = (i + 1) + ' / ' + photos.length + '  ♡';
+    slide.appendChild(count);
+    strip.appendChild(slide);
+  });
+  content.appendChild(strip);
+  const tip = document.createElement('p');
+  tip.className = 'diary-photo-tip';
+  tip.textContent = 'Desliza hacia un lado para ver las demás fotitos  ← →';
+  content.appendChild(tip);
+  viewer.hidden = false;
+}
+function closeDiaryMedia(){
+  const viewer = document.getElementById('diary-media-viewer');
+  const video = viewer.querySelector('video');
+  if(video){video.pause();video.removeAttribute('src');video.load();}
+  viewer.hidden = true;
+  document.getElementById('diary-media-content').innerHTML = '';
+}
+document.addEventListener('keydown',event=>{if(event.key === 'Escape') closeDiaryMedia();});
+</script>
+<style id="house-doors-independent-fix">
+/* Las dos sorpresas comparten el contenedor, pero cada puerta conserva su propio contenido. */
+#house-door-modal[hidden], #aquarium-transition[hidden]{display:none!important}
+#house-door-modal:not([hidden]){display:grid!important;position:fixed!important;inset:0!important;z-index:2147483000!important;overflow-y:auto!important;overflow-x:hidden!important;align-items:start!important;justify-items:center!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior:contain!important}
+#aquarium-transition:not([hidden]){position:fixed!important;inset:0!important;z-index:2147482000!important}
+#house-door-modal .house-modal-card{flex-shrink:0!important;max-height:none!important}
+</style>
+<script id="house-doors-independent-flow">
+(function(){
+  let doorOneTimer = null;
+  let doorOneOpening = false;
+  const transition = () => document.getElementById('aquarium-transition');
+  const modal = () => document.getElementById('house-door-modal');
+  const showModal = () => {
+    const m = modal();
+    if (!m) return;
+    m.hidden = false;
+    m.style.display = 'grid';
+    m.setAttribute('aria-modal','true');
+    document.body.classList.add('house-door-open');
+    requestAnimationFrame(() => { if (!m.hidden) m.scrollTop = 0; });
+  };
+  const hideTransition = () => {
+    const t = transition();
+    if (t) { t.hidden = true; t.style.display = 'none'; t.classList.remove('active'); }
+  };
+  const originalRenderHouseDoor = window.renderHouseDoor;
+  window.renderHouseDoor = function(number){
+    // El render original elige el contenido según el número: 1 acuario, 2 Disneyland, 3 sorpresa.
+    if (typeof originalRenderHouseDoor === 'function') originalRenderHouseDoor(number);
+    hideTransition();
+    showModal();
+    doorOneOpening = false;
+  };
+  window.openHouseDoor = function(number){
+    if (doorOneTimer) { clearTimeout(doorOneTimer); doorOneTimer = null; }
+    if (number !== 1) {
+      // Las puertas 2 y 3 se abren directamente y no heredan la transición ni el contenido de la puerta 1.
+      doorOneOpening = false;
+      hideTransition();
+      const m = modal();
+      if (m) { m.hidden = true; m.style.display = 'none'; }
+      if (typeof window.renderHouseDoor === 'function') window.renderHouseDoor(number);
+      return;
+    }
+    if (doorOneOpening) return;
+    doorOneOpening = true;
+    const m = modal();
+    if (m) { m.hidden = true; m.style.display = 'none'; }
+    const t = transition();
+    if (t) {
+      t.hidden = false; t.style.display = 'grid';
+      t.classList.remove('active'); void t.offsetWidth; t.classList.add('active');
+    }
+    doorOneTimer = window.setTimeout(() => {
+      doorOneTimer = null;
+      hideTransition();
+      window.renderHouseDoor(1);
+    }, 1150);
+  };
+  const originalCloseHouseDoor = window.closeHouseDoor;
+  window.closeHouseDoor = function(){
+    if (doorOneTimer) { clearTimeout(doorOneTimer); doorOneTimer = null; }
+    doorOneOpening = false;
+    hideTransition();
+    const m = modal();
+    if (m) { m.hidden = true; m.style.display = 'none'; }
+    document.body.classList.remove('house-door-open');
+    if (typeof originalCloseHouseDoor === 'function') originalCloseHouseDoor();
+    if (m) { m.hidden = true; m.style.display = 'none'; }
+  };
+  document.addEventListener('keydown', function(e){
+    const m = modal();
+    if (e.key === 'Escape' && m && !m.hidden) window.closeHouseDoor();
+  });
+})();
+</script>
+<script id="house-doors-final-repair">
+(function(){
+  let timer = null;
+  const get = id => document.getElementById(id);
+  function hideTransition(){
+    const t=get('aquarium-transition');
+    if(t){t.hidden=true;t.style.display='none';t.classList.remove('active');}
+  }
+  function showDoor(n){
+    const modal=get('house-door-modal');
+    if(!modal || typeof window.renderHouseDoor!=='function') return;
+    hideTransition();
+    // Always render by door number, so each door restores its own original content.
+    window.renderHouseDoor(n);
+    modal.hidden=false;
+    modal.style.display='grid';
+    modal.setAttribute('aria-modal','true');
+    document.body.classList.add('house-door-open');
+    requestAnimationFrame(()=>{ if(!modal.hidden) modal.scrollTop=0; });
+  }
+  window.openHouseDoor=function(number){
+    const n=Number(number), modal=get('house-door-modal'), transition=get('aquarium-transition');
+    if(![1,2,3].includes(n) || !modal) return;
+    if(timer){clearTimeout(timer);timer=null;}
+    modal.hidden=true; modal.style.display='none';
+    hideTransition();
+    if(n===1 && transition){
+      transition.hidden=false;transition.style.display='grid';
+      transition.classList.remove('active');void transition.offsetWidth;transition.classList.add('active');
+      timer=setTimeout(()=>{timer=null;showDoor(1);},1100);
+    } else showDoor(n);
+  };
+  window.closeHouseDoor=function(){
+    if(timer){clearTimeout(timer);timer=null;}
+    const modal=get('house-door-modal');
+    if(modal){modal.hidden=true;modal.style.display='none';}
+    hideTransition();
+    document.body.classList.remove('house-door-open');
+    const p=get('disney-letter-panel');if(p)p.hidden=true;
+    const a=get('aquarium-letter-note');if(a)a.hidden=true;
+    const scene=get('whale-together-scene');if(scene)scene.hidden=true;
+  };
+  // Delegation survives if earlier scripts replaced handlers or rebuilt modal content.
+  document.addEventListener('click',function(e){
+    const door=e.target.closest && e.target.closest('.house-door-hit');
+    if(door){
+      e.preventDefault();
+      const n=door.classList.contains('door-one')?1:door.classList.contains('door-two')?2:3;
+      window.openHouseDoor(n);
+      return;
+    }
+    const modal=get('house-door-modal');
+    if(modal && e.target===modal) window.closeHouseDoor();
+    const close=e.target.closest && e.target.closest('[data-close-house-door], .house-door-close');
+    if(close){e.preventDefault();window.closeHouseDoor();}
+  },true);
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){const m=get('house-door-modal');if(m&&!m.hidden)window.closeHouseDoor();}
+  });
+})();
+</script>
+</body>
+</html>
